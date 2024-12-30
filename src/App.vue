@@ -4,4 +4,10 @@
 
 <script setup></script>
 
-<style scoped></style>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Roboto", serif;
+}
+</style>
