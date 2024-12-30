@@ -10,4 +10,7 @@
   padding: 0;
   font-family: "Roboto", serif;
 }
+body {
+  background: #efefef;
+}
 </style>
