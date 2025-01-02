@@ -3,61 +3,29 @@
     <h3 class="container-title">Koththu</h3>
     <hr class="container-devider" />
     <div class="food-section">
-      <div class="food-item" v-for="item in foodInfo" :key="item.id">
+      <div class="food-item" v-for="item in foodstore.foodInfo" :key="item.id">
         <img :src="item.image" :alt="item.alt" class="food-image" />
         <h4 class="food-title">{{ item.name }}</h4>
-        <p class="food-price">Rs. {{ item.price }}</p>
-        <button class="action-button">view</button>
+        <p class="food-price">
+          Rs. {{ item.size[foodstore.selectedPotion].price }}
+        </p>
+        <button class="action-button" @click="selectFood(item.id)">view</button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { useFoodStore } from "@/stores/food";
+import { useUiStore } from "@/stores/ui";
 
-const foodInfo = ref([
-  {
-    id: 0,
-    image:
-      "https://curryhut.blr1.cdn.digitaloceanspaces.com/sample-images/koththu.webp",
-    alt: "koththu",
-    name: "Chicken koththu",
-    price: 1200,
-  },
-  {
-    id: 1,
-    image:
-      "https://curryhut.blr1.cdn.digitaloceanspaces.com/sample-images/koththu.webp",
-    alt: "koththu",
-    name: "Cheese koththu",
-    price: 1800,
-  },
-  {
-    id: 2,
-    image:
-      "https://curryhut.blr1.cdn.digitaloceanspaces.com/sample-images/koththu.webp",
-    alt: "koththu",
-    name: "Mutten koththu",
-    price: 2200,
-  },
-  {
-    id: 3,
-    image:
-      "https://curryhut.blr1.cdn.digitaloceanspaces.com/sample-images/koththu.webp",
-    alt: "koththu",
-    name: "Egg koththu",
-    price: 1100,
-  },
-  {
-    id: 4,
-    image:
-      "https://curryhut.blr1.cdn.digitaloceanspaces.com/sample-images/koththu.webp",
-    alt: "koththu",
-    name: "Vegi koththu",
-    price: 900,
-  },
-]);
+const uiStore = useUiStore();
+const foodstore = useFoodStore();
+
+const selectFood = (id) => {
+  foodstore.selectedFood = id;
+  uiStore.foodPopup = true;
+};
 </script>
 <style scoped>
 .food-container {
