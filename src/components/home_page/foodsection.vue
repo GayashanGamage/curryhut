@@ -6,9 +6,7 @@
       <div class="food-item" v-for="item in foodstore.foodInfo" :key="item.id">
         <img :src="item.image" :alt="item.alt" class="food-image" />
         <h4 class="food-title">{{ item.name }}</h4>
-        <p class="food-price">
-          Rs. {{ item.size[foodstore.selectedPotion].price }}
-        </p>
+        <p class="food-price">Rs. {{ item.size[0].price }}</p>
         <button class="action-button" @click="selectFood(item.id)">view</button>
       </div>
     </div>

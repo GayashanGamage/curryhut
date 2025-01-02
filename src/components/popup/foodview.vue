@@ -71,6 +71,7 @@
             </button>
           </div>
         </div>
+        <button class="cart-button" @click="clossWindow">Add to cart</button>
       </div>
     </div>
   </div>
@@ -84,13 +85,18 @@ import { onClickOutside } from "@vueuse/core";
 import { ref } from "vue";
 const foodStore = useFoodStore();
 const order = useOrderStore();
-
-const target = ref(null);
 const uiStore = useUiStore();
+
+// outside click refference
+const target = ref(null);
 
 onClickOutside(target, (onclick) => {
   uiStore.foodPopup = false;
 });
+
+const clossWindow = () => {
+  uiStore.foodPopup = false;
+};
 </script>
 
 <style scoped>
@@ -237,5 +243,29 @@ onClickOutside(target, (onclick) => {
   font-style: normal;
   font-weight: 600;
   line-height: normal;
+}
+.cart-button {
+  display: flex;
+  height: 36px;
+  padding: 5px 85px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  align-self: stretch;
+  border-radius: 4px;
+  background: #ff8f8f;
+  color: #fff;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  border: 0px;
+}
+.cart-button:hover {
+  background: #ff7878;
+}
+.cart-button:active {
+  background: #ff5e5e;
 }
 </style>
