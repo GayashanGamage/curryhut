@@ -83,9 +83,12 @@ import { useOrderStore } from "@/stores/order";
 import { useUiStore } from "@/stores/ui";
 import { onClickOutside } from "@vueuse/core";
 import { ref } from "vue";
+import { useToast } from "vue-toast-notification";
 const foodStore = useFoodStore();
 const order = useOrderStore();
 const uiStore = useUiStore();
+
+const toast = useToast();
 
 // outside click refference
 const target = ref(null);
@@ -95,7 +98,12 @@ onClickOutside(target, (onclick) => {
 });
 
 const clossWindow = () => {
+  order.selectedItemCount = 1;
   uiStore.foodPopup = false;
+  toast.open({
+    message: "Item added to cart successfully",
+    type: "success",
+  });
 };
 </script>
 
