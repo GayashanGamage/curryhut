@@ -12,7 +12,12 @@
         <div class="content-item" v-for="option in options" :key="option.id">
           <p class="item-description">{{ option.description }}</p>
           <p class="item-price">Rs.{{ option.price }}</p>
-          <button class="item-action">Select curries</button>
+          <button
+            class="item-action"
+            @click="openPopup(option.id, option.special, option.price)"
+          >
+            Select curries
+          </button>
         </div>
       </div>
     </div>
@@ -20,25 +25,45 @@
 </template>
 
 <script setup>
+import { useOrderStore } from "@/stores/order";
+import { useUiStore } from "@/stores/ui";
 import { ref } from "vue";
+const uiStore = useUiStore();
+const orderStore = useOrderStore();
 
 const options = ref([
   {
     id: 1,
     description: "Rice + 3 curry",
+    special: "vegitable",
     price: 300,
   },
   {
     id: 2,
     description: "rice + 3 curry + chicken",
+    special: "chicken",
     price: 360,
   },
   {
     id: 3,
     description: "rice + 3 curry + fish",
+    special: "fich",
     price: 340,
   },
 ]);
+
+const openPopup = (id, special, price) => {
+  uiStore.riceandcurryPopup = true;
+  orderStore.temparyOrderItem = {
+    itemid: orderStore.order.length + 1,
+    foodid: id,
+    quantity: 1,
+    special: special,
+    price: price,
+    rice: "white rice",
+    curry: [],
+  };
+};
 </script>
 
 <style scoped>
@@ -139,5 +164,8 @@ const options = ref([
   line-height: normal;
   flex: 1 0 0;
   border: 0px;
+}
+.item-action:hover {
+  background: #fc6d6d;
 }
 </style>

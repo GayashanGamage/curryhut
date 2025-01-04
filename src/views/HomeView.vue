@@ -12,6 +12,7 @@
     <div class="space"></div>
     <Footer></Footer>
     <Foodview></Foodview>
+    <riceandcurryVue></riceandcurryVue>
   </main>
 </template>
 
@@ -24,6 +25,7 @@ import Foodtags from "@/components/home_page/foodtags.vue";
 import Mainbanner from "@/components/home_page/mainbanner.vue";
 // popup import
 import Foodview from "@/components/popup/foodview.vue";
+import riceandcurryVue from "@/components/popup/riceandcurry.vue";
 </script>
 
 <style scoped>

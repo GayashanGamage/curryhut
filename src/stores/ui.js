@@ -3,5 +3,6 @@ import { defineStore } from "pinia";
 
 export const useUiStore = defineStore("ui", () => {
   const foodPopup = ref(false);
-  return { foodPopup };
+  const riceandcurryPopup = ref(false);
+  return { foodPopup, riceandcurryPopup };
 });
