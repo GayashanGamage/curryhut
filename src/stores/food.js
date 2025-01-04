@@ -223,6 +223,31 @@ export const useFoodStore = defineStore("food", () => {
         },
       ],
     },
+    // rice and curry
+    {
+      id: 101,
+      categoryId: "abc11",
+      categoryName: "rice&curry",
+      special: "vegitable",
+      name: "rice and curry",
+      price: 250,
+    },
+    {
+      id: 102,
+      categoryId: "abc11",
+      categoryName: "rice&curry",
+      special: "fish",
+      name: "rice and curry + fish",
+      price: 320,
+    },
+    {
+      id: 103,
+      categoryId: "abc11",
+      categoryName: "rice&curry",
+      special: "chicken",
+      name: "rice and curry + checken",
+      price: 350,
+    },
     // rice category
     {
       id: 66,

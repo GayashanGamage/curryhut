@@ -4,7 +4,7 @@
       <h3 class="window-title">Select curries for your meal</h3>
       <hr class="section-devider" />
       <div class="common-section">
-        <p class="description">White rice</p>
+        <p class="description">{{ rice[0].name }}</p>
         <div class="toggle">
           <span class="switch">
             <input id="switch-rounded" type="checkbox" @click="selectRice()" />
@@ -15,7 +15,7 @@
       </div>
       <hr class="section-devider" />
       <div class="curry-section">
-        <div class="curry" v-for="item in riceandcurry.curry" :key="item">
+        <div class="curry" v-for="item in curry" :key="item.id">
           <p class="description">{{ item.name }}</p>
           <button class="action-button" :id="item.id" @click="addCurry(item)">
             Add
@@ -48,11 +48,13 @@
 </template>
 
 <script setup>
+import { useFoodStore } from "@/stores/food";
 import { useOrderStore } from "@/stores/order";
 import { useUiStore } from "@/stores/ui";
 import { onClickOutside } from "@vueuse/core";
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 const orderStore = useOrderStore();
+const foodStore = useFoodStore();
 
 const uiStore = useUiStore();
 
@@ -62,40 +64,13 @@ const target = ref(null);
 // enable and disable the add to cart button
 const buttonActive = ref(false);
 
-const riceandcurry = ref({
-  rice: [
-    {
-      id: 200,
-      name: "white rice",
-    },
-    {
-      id: 201,
-      name: "red rice",
-    },
-  ],
-  curry: [
-    {
-      id: 100,
-      name: "Polsambola",
-    },
-    {
-      id: 101,
-      name: "polos curry",
-    },
-    {
-      id: 102,
-      name: "Kohila curry",
-    },
-    {
-      id: 103,
-      name: "Dhal curry",
-    },
-    {
-      id: 104,
-      name: "Potato curry",
-    },
-  ],
-});
+const rice = computed(() =>
+  foodStore.foodInfo.filter((item) => item.categoryName === "rice")
+);
+
+const curry = computed(() =>
+  foodStore.foodInfo.filter((item) => item.categoryName === "curry")
+);
 
 // close the popup window and reset the tempary order item
 const closePopup = () => {

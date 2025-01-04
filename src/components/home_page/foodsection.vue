@@ -38,7 +38,7 @@ const selectFood = (item, index) => {
   foodstore.selectedFood = index;
   // setting the tempary order item
   orderStore.temparyOrderItem = {
-    id: item.id,
+    foodid: item.id,
     name: item.name,
     price: item.size[foodstore.selectedPotion].price,
     quantity: 1,

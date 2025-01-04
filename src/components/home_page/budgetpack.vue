@@ -9,13 +9,10 @@
       <h3 class="title">Budget Pack</h3>
       <p class="description">Rice and curry</p>
       <div class="content-container">
-        <div class="content-item" v-for="option in options" :key="option.id">
-          <p class="item-description">{{ option.description }}</p>
-          <p class="item-price">Rs.{{ option.price }}</p>
-          <button
-            class="item-action"
-            @click="openPopup(option.id, option.special, option.price)"
-          >
+        <div class="content-item" v-for="item in riceandcurry" :key="item.id">
+          <p class="item-description">{{ item.name }}</p>
+          <p class="item-price">Rs.{{ item.price }}</p>
+          <button class="item-action" @click="openPopup(item)">
             Select curries
           </button>
         </div>
@@ -25,41 +22,26 @@
 </template>
 
 <script setup>
+import { useFoodStore } from "@/stores/food";
 import { useOrderStore } from "@/stores/order";
 import { useUiStore } from "@/stores/ui";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 const uiStore = useUiStore();
 const orderStore = useOrderStore();
+const foodStore = useFoodStore();
 
-const options = ref([
-  {
-    id: 1,
-    description: "Rice + 3 curry",
-    special: "vegitable",
-    price: 300,
-  },
-  {
-    id: 2,
-    description: "rice + 3 curry + chicken",
-    special: "chicken",
-    price: 360,
-  },
-  {
-    id: 3,
-    description: "rice + 3 curry + fish",
-    special: "fich",
-    price: 340,
-  },
-]);
+const riceandcurry = computed(() =>
+  foodStore.foodInfo.filter((item) => item.categoryName === "rice&curry")
+);
 
-const openPopup = (id, special, price) => {
+const openPopup = (item) => {
   uiStore.riceandcurryPopup = true;
   orderStore.temparyOrderItem = {
-    itemid: orderStore.order.length + 1,
-    foodid: id,
+    foodid: item.id,
+    name: item.name,
     quantity: 1,
-    special: special,
-    price: price,
+    price: item.price,
+    special: item.special,
     rice: "white rice",
     curry: [],
   };
