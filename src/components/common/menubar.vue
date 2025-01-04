@@ -1,11 +1,21 @@
 <template>
   <div class="main-container">
-    <h3 class="site-title">Curry Hut</h3>
+    <h3 class="site-title">
+      <router-link to="/">Curry Hut</router-link>
+    </h3>
     <div class="menu">
-      <p class="menu-item">main menu</p>
-      <p class="menu-item">extra posion</p>
-      <p class="menu-item">desert</p>
-      <p class="menu-item">drinks</p>
+      <p class="menu-item">
+        <router-link to="/">Main dish</router-link>
+      </p>
+      <p class="menu-item">
+        <router-link to="/extra">extra potion</router-link>
+      </p>
+      <p class="menu-item">
+        <router-link to="/decert">decert</router-link>
+      </p>
+      <p class="menu-item">
+        <router-link to="/drinks">drinks</router-link>
+      </p>
       <button class="action-button">Login</button>
       <span class="material-icons">local_mall</span>
     </div>
@@ -44,6 +54,10 @@
   font-weight: 300;
   line-height: normal;
   text-transform: uppercase;
+}
+a {
+  text-decoration: none;
+  color: #fff;
 }
 .menu-item:hover {
   font-weight: 500;

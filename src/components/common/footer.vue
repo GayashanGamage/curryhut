@@ -12,10 +12,18 @@
     </div>
     <div class="sub-container">
       <p class="container-title">are you hungry ?</p>
-      <p class="content">Main menu</p>
-      <p class="content">Extra potion</p>
-      <p class="content">Deserts</p>
-      <p class="content">Drinks</p>
+      <p class="content">
+        <router-link to="/">Main menu</router-link>
+      </p>
+      <p class="content">
+        <router-link to="/extra">Extra potion</router-link>
+      </p>
+      <p class="content">
+        <router-link to="/decert">Decerts</router-link>
+      </p>
+      <p class="content">
+        <router-link to="/drinks">Drinks</router-link>
+      </p>
     </div>
     <div class="sub-container">
       <p class="container-title">Important links</p>
@@ -95,6 +103,10 @@ const social_links = [
   font-weight: 300;
   line-height: normal;
   align-self: stretch;
+}
+a {
+  text-decoration: none;
+  color: #000;
 }
 .contact {
   display: flex;
