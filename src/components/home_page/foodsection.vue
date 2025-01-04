@@ -1,7 +1,10 @@
 <template>
   <div class="food-container">
-    <h3 class="container-title">
+    <h3 class="container-title" v-if="titleToggle">
       {{ foodstore.uniqueCategories[foodstore.selectedCategory] }}
+    </h3>
+    <h3 class="container-title" v-if="!titleToggle">
+      {{ sectionTitile }}
     </h3>
     <hr class="container-devider" />
     <div class="food-section">
@@ -27,9 +30,11 @@
 import { useFoodStore } from "@/stores/food";
 import { useOrderStore } from "@/stores/order";
 import { useUiStore } from "@/stores/ui";
+import { onBeforeUpdate, ref } from "vue";
+import { useRoute } from "vue-router";
+const route = useRoute();
 
 const orderStore = useOrderStore();
-
 const uiStore = useUiStore();
 const foodstore = useFoodStore();
 
@@ -46,6 +51,27 @@ const selectFood = (item, index) => {
   };
   uiStore.foodPopup = true;
 };
+
+const sectionTitile = ref();
+const titleToggle = ref(true);
+
+// set the title for the component
+onBeforeUpdate(() => {
+  if (route.name === "extra") {
+    titleToggle.value = false;
+    sectionTitile.value = "Extra potion";
+  } else if (route.name === "drinks") {
+    titleToggle.value = false;
+    sectionTitile.value = "Drinks";
+  } else if (route.name === "decert") {
+    titleToggle.value = false;
+    sectionTitile.value = "Decerts";
+  } else {
+    titleToggle.value = true;
+    sectionTitile.value =
+      foodstore.uniqueCategories[foodstore.selectedCategory];
+  }
+});
 </script>
 <style scoped>
 .food-container {
@@ -89,7 +115,7 @@ const selectFood = (item, index) => {
   gap: 6px;
   align-self: stretch;
   min-width: 200px;
-  /* max-width: 250px; */
+  max-width: 250px;
   height: auto;
   padding: 6px;
   flex-direction: column;

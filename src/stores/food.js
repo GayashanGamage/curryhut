@@ -203,6 +203,50 @@ export const useFoodStore = defineStore("food", () => {
     },
     {
       id: 60,
+      categoryId: "abc12",
+      categoryName: "extra",
+      image:
+        "https://curryhut.blr1.cdn.digitaloceanspaces.com/sample-images/koththu.webp",
+      name: "Pork",
+      description:
+        "Tender roasted chicken mixed with soft, flaky roti, fresh vegetables, and a blend of spices for a hearty and flavorful Sri Lankan street food experience.",
+      size: [
+        {
+          name: "small",
+          price: 600,
+          portion: "2 person",
+        },
+        {
+          name: "medium",
+          price: 1200,
+          portion: "4 person",
+        },
+      ],
+    },
+    {
+      id: 61,
+      categoryId: "abc13",
+      categoryName: "extra",
+      image:
+        "https://curryhut.blr1.cdn.digitaloceanspaces.com/sample-images/koththu.webp",
+      name: "Bullsey",
+      description:
+        "Tender roasted chicken mixed with soft, flaky roti, fresh vegetables, and a blend of spices for a hearty and flavorful Sri Lankan street food experience.",
+      size: [
+        {
+          name: "small",
+          price: 800,
+          portion: "1 person",
+        },
+        {
+          name: "medium",
+          price: 1400,
+          portion: "2 person",
+        },
+      ],
+    },
+    {
+      id: 62,
       categoryId: "abc5",
       categoryName: "nasigauran",
       image:
@@ -220,6 +264,101 @@ export const useFoodStore = defineStore("food", () => {
           name: "medium",
           price: 500,
           portion: "2 person",
+        },
+      ],
+    },
+    // drinks
+    {
+      id: 63,
+      categoryId: "abc14",
+      categoryName: "drinks",
+      image:
+        "https://curryhut.blr1.cdn.digitaloceanspaces.com/sample-images/koththu.webp",
+      name: "Coca cola",
+      description:
+        "Tender roasted chicken mixed with soft, flaky roti, fresh vegetables, and a blend of spices for a hearty and flavorful Sri Lankan street food experience.",
+      size: [
+        {
+          name: "pet",
+          price: 100,
+          portion: "1 person",
+        },
+        {
+          name: "buddy",
+          price: 150,
+          portion: "2 person",
+        },
+        {
+          name: "mega",
+          price: 240,
+          portion: "4 person",
+        },
+      ],
+    },
+    {
+      id: 63,
+      categoryId: "abc15",
+      categoryName: "drinks",
+      image:
+        "https://curryhut.blr1.cdn.digitaloceanspaces.com/sample-images/koththu.webp",
+      name: "Sprite",
+      description:
+        "Tender roasted chicken mixed with soft, flaky roti, fresh vegetables, and a blend of spices for a hearty and flavorful Sri Lankan street food experience.",
+      size: [
+        {
+          name: "pet",
+          price: 100,
+          portion: "1 person",
+        },
+        {
+          name: "jumbo",
+          price: 250,
+          portion: "4 person",
+        },
+      ],
+    },
+    // decert section
+    {
+      id: 64,
+      categoryId: "abc16",
+      categoryName: "decert",
+      image:
+        "https://curryhut.blr1.cdn.digitaloceanspaces.com/sample-images/koththu.webp",
+      name: "Ice cream",
+      description:
+        "Tender roasted chicken mixed with soft, flaky roti, fresh vegetables, and a blend of spices for a hearty and flavorful Sri Lankan street food experience.",
+      size: [
+        {
+          name: "vanila",
+          price: 120,
+          portion: "1 person",
+        },
+        {
+          name: "chocolate",
+          price: 120,
+          portion: "1 person",
+        },
+        {
+          name: "strawberry",
+          price: 130,
+          portion: "1 person",
+        },
+      ],
+    },
+    {
+      id: 65,
+      categoryId: "abc17",
+      categoryName: "decert",
+      image:
+        "https://curryhut.blr1.cdn.digitaloceanspaces.com/sample-images/koththu.webp",
+      name: "Mari biscuit pudding",
+      description:
+        "Tender roasted chicken mixed with soft, flaky roti, fresh vegetables, and a blend of spices for a hearty and flavorful Sri Lankan street food experience.",
+      size: [
+        {
+          name: "regular cup",
+          price: 150,
+          portion: "1 person",
         },
       ],
     },
@@ -296,7 +435,9 @@ export const useFoodStore = defineStore("food", () => {
 
   const uniqueCategories = [
     ...new Set(foodInfo.value.map((item) => item.categoryName)),
-  ].filter((category) => !["rice", "curry"].includes(category));
+  ].filter(
+    (category) => !["rice&curry", "extra", "rice", "curry"].includes(category)
+  );
 
   const selectedCategory = ref(0); //this is for identify the selected category
   const selectedFood = ref(null); //this is for identify the selected food item index form 'allSelectedCategoryItems'
