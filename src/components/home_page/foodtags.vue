@@ -1,58 +1,28 @@
 <template>
   <div class="tag-container">
     <div
-      v-for="item in tags"
-      :key="item.id"
-      :class="item.class"
-      @click="changeCategory(item.id)"
+      v-for="(item, index) in foodStore.uniqueCategories"
+      :key="item"
+      @click="foodStore.selectedCategory = index"
+      :class="['tag', foodStore.selectedCategory === index ? 'select' : '']"
     >
-      <p class="tag-name">{{ item.name }}</p>
+      <p class="tag-name">{{ item }}</p>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { useFoodStore } from "@/stores/food";
+import { onMounted } from "vue";
+const foodStore = useFoodStore();
 
-const tags = ref([
-  {
-    id: 0,
-    name: "Chopsye rice",
-    class: "tag",
-  },
-  {
-    id: 1,
-    name: "Koththu",
-    class: "tag select",
-  },
-  {
-    id: 2,
-    name: "Fried rice",
-    class: "tag",
-  },
-  {
-    id: 3,
-    name: "Nasigueran",
-    class: "tag",
-  },
-  {
-    id: 4,
-    name: "Noodles",
-    class: "tag",
-  },
-  {
-    id: 5,
-    name: "Chopsye noodles",
-    class: "tag",
-  },
-]);
-
-const changeCategory = (id) => {
-  for (let i = 0; i < tags.value.length; i++) {
-    tags.value[i].class = "tag";
-  }
-  tags.value[id].class = "tag select";
-};
+onMounted(() => {
+  foodStore.allSelectedCategoryItems = foodStore.foodInfo.filter(
+    (item) =>
+      item.categoryName ===
+      foodStore.uniqueCategories[foodStore.selectedCategory]
+  );
+});
 </script>
 
 <style scoped>

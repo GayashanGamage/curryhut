@@ -4,13 +4,9 @@ import { useUiStore } from "./ui";
 import { useToast } from "vue-toast-notification";
 
 export const useOrderStore = defineStore("order", () => {
-  //this is for the quantity of the selected item in the order
-  const selectedItemCount = ref(1);
-
   const curryCount = ref(0); //get how many couries selected
-  // const curryAvailability = ref(true);
 
-  // this is for the tempary selected item before add to the order list
+  // this is for the tempary selected item before add to the order list - rice and curry
   const temparyOrderItem = ref();
   /*{
       itemid: 1,
@@ -18,6 +14,7 @@ export const useOrderStore = defineStore("order", () => {
       quantity: 1,
       name: "Chicken Kottu",
       price: 350,
+      size : '';
       rice : 'white'
       curry : [id, id, id]
     },*/
@@ -49,13 +46,6 @@ export const useOrderStore = defineStore("order", () => {
     }
   });
 
-  // set a minimum value for selectedItemCount
-  watch(selectedItemCount, (newVal) => {
-    if (newVal < 1) {
-      selectedItemCount.value = 1;
-    }
-  });
-
   const addToOrder = () => {
     order.value.push(temparyOrderItem.value);
     temparyOrderItem.value = undefined;
@@ -68,7 +58,6 @@ export const useOrderStore = defineStore("order", () => {
   };
 
   return {
-    selectedItemCount,
     curryCount,
     // curryAvailability,
     order,

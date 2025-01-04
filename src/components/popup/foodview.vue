@@ -2,26 +2,30 @@
   <div class="main-popup" v-if="uiStore.foodPopup">
     <div class="popup-window" ref="target">
       <img
-        :src="foodStore.foodInfo[foodStore.selectedFood].image"
+        :src="foodStore.allSelectedCategoryItems[foodStore.selectedFood].image"
         alt="rice and curry"
         class="image"
       />
       <div class="popup-content">
         <h3 class="window-title">
-          {{ foodStore.foodInfo[foodStore.selectedFood].name }}
+          {{ foodStore.allSelectedCategoryItems[foodStore.selectedFood].name }}
         </h3>
         <p class="description">
-          {{ foodStore.foodInfo[foodStore.selectedFood].description }}
+          {{
+            foodStore.allSelectedCategoryItems[foodStore.selectedFood]
+              .description
+          }}
         </p>
         <div class="sub-section">
           <h4 class="section-title">Size</h4>
           <hr class="sub-section-devider" />
           <div class="sub-section-container">
             <button
-              v-for="(item, index) in foodStore.foodInfo[foodStore.selectedFood]
-                .size"
+              v-for="(item, index) in foodStore.allSelectedCategoryItems[
+                foodStore.selectedFood
+              ].size"
               :key="item"
-              @click="foodStore.selectedPotion = index"
+              @click="changeFoodSize(index)"
               :class="[
                 'action-button',
                 foodStore.selectedPotion === index
@@ -33,7 +37,7 @@
             </button>
             <p class="portion">
               {{
-                foodStore.foodInfo[foodStore.selectedFood].size[
+                foodStore.allSelectedCategoryItems[foodStore.selectedFood].size[
                   foodStore.selectedPotion
                 ].portion
               }}
@@ -46,7 +50,7 @@
           <p class="price">
             Rs.
             {{
-              foodStore.foodInfo[foodStore.selectedFood].size[
+              foodStore.allSelectedCategoryItems[foodStore.selectedFood].size[
                 foodStore.selectedPotion
               ].price
             }}
@@ -56,22 +60,16 @@
           <h4 class="section-title">Quantity</h4>
           <hr class="sub-section-devider" />
           <div class="sub-section-container">
-            <button
-              class="quntity-change"
-              @click="order.selectedItemCount += 1"
-            >
+            <button class="quntity-change" @click="quntityChange('add')">
               +
             </button>
-            <p class="quantity">{{ order.selectedItemCount }}</p>
-            <button
-              class="quntity-change"
-              @click="order.selectedItemCount -= 1"
-            >
+            <p class="quantity">{{ orderStore.temparyOrderItem.quantity }}</p>
+            <button class="quntity-change" @click="quntityChange('sub')">
               -
             </button>
           </div>
         </div>
-        <button class="cart-button" @click="clossWindow">Add to cart</button>
+        <button class="cart-button" @click="addtocart">Add to cart</button>
       </div>
     </div>
   </div>
@@ -85,7 +83,7 @@ import { onClickOutside } from "@vueuse/core";
 import { ref } from "vue";
 import { useToast } from "vue-toast-notification";
 const foodStore = useFoodStore();
-const order = useOrderStore();
+const orderStore = useOrderStore();
 const uiStore = useUiStore();
 
 const toast = useToast();
@@ -93,17 +91,51 @@ const toast = useToast();
 // outside click refference
 const target = ref(null);
 
+// remove tempary order item when popup closed
+const removeTemparyOrderItem = () => {
+  orderStore.temparyOrderItem = undefined;
+  foodStore.selectedFood = null;
+  foodStore.selectedPotion = 0;
+};
+
+// outside click and close the popup
 onClickOutside(target, (onclick) => {
   uiStore.foodPopup = false;
+  removeTemparyOrderItem();
 });
 
-const clossWindow = () => {
-  order.selectedItemCount = 1;
-  uiStore.foodPopup = false;
+// this is for add item to cart and close the popup
+const addtocart = () => {
+  orderStore.order.push(orderStore.temparyOrderItem);
+  removeTemparyOrderItem();
   toast.open({
     message: "Item added to cart successfully",
     type: "success",
   });
+  uiStore.foodPopup = false;
+};
+
+// quntity change - set min for 1
+const quntityChange = (type) => {
+  if (type === "add") {
+    orderStore.temparyOrderItem.quantity += 1;
+  } else if (type === "sub") {
+    if (orderStore.temparyOrderItem.quantity === 1) {
+      orderStore.temparyOrderItem.quantity = 1;
+    } else {
+      orderStore.temparyOrderItem.quantity -= 1;
+    }
+  }
+};
+
+const changeFoodSize = (index) => {
+  foodStore.selectedPotion = index;
+  orderStore.temparyOrderItem.price =
+    foodStore.allSelectedCategoryItems[foodStore.selectedFood].size[
+      index
+    ].price;
+  orderStore.temparyOrderItem.size =
+    foodStore.allSelectedCategoryItems[foodStore.selectedFood].size[index].name;
 };
 </script>
 

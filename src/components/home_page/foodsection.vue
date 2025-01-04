@@ -1,13 +1,23 @@
 <template>
   <div class="food-container">
-    <h3 class="container-title">Koththu</h3>
+    <h3 class="container-title">
+      {{ foodstore.uniqueCategories[foodstore.selectedCategory] }}
+    </h3>
     <hr class="container-devider" />
     <div class="food-section">
-      <div class="food-item" v-for="item in foodstore.foodInfo" :key="item.id">
-        <img :src="item.image" :alt="item.alt" class="food-image" />
+      <div
+        class="food-item"
+        v-for="(item, index) in foodstore.allSelectedCategoryItems"
+        :key="item.id"
+      >
+        <img :src="item.image" :alt="item.name + ' image'" class="food-image" />
         <h4 class="food-title">{{ item.name }}</h4>
-        <p class="food-price">Rs. {{ item.size[0].price }}</p>
-        <button class="action-button" @click="selectFood(item.id)">view</button>
+        <p class="food-price">
+          Rs. {{ item.size[foodstore.selectedPotion].price }}
+        </p>
+        <button class="action-button" @click="selectFood(item, index)">
+          view
+        </button>
       </div>
     </div>
   </div>
@@ -15,13 +25,25 @@
 
 <script setup>
 import { useFoodStore } from "@/stores/food";
+import { useOrderStore } from "@/stores/order";
 import { useUiStore } from "@/stores/ui";
+
+const orderStore = useOrderStore();
 
 const uiStore = useUiStore();
 const foodstore = useFoodStore();
 
-const selectFood = (id) => {
-  foodstore.selectedFood = id;
+const selectFood = (item, index) => {
+  console.log(item);
+  foodstore.selectedFood = index;
+  // setting the tempary order item
+  orderStore.temparyOrderItem = {
+    id: item.id,
+    name: item.name,
+    price: item.size[foodstore.selectedPotion].price,
+    quantity: 1,
+    size: item.size[foodstore.selectedPotion].name,
+  };
   uiStore.foodPopup = true;
 };
 </script>
