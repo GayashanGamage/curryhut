@@ -20,13 +20,14 @@
         <input type="text" placeholder="Mobile number" class="auth-input" />
         <input type="text" placeholder="Password" class="auth-input" />
         <input type="text" placeholder="re-enter password" class="auth-input" />
-        <p class="sub-action">Forget password ?</p>
         <button class="auth-content-action">SIGN IN</button>
       </div>
       <div class="auth-content" id="signup-content" v-if="!signIn">
         <input type="text" placeholder="Mobile number" class="auth-input" />
         <input type="text" placeholder="Password" class="auth-input" />
-        <p class="sub-action">Forget password ?</p>
+        <router-link to="/code">
+          <p class="sub-action">Forget password ?</p></router-link
+        >
         <button class="auth-content-action">SIGN UP</button>
       </div>
     </div>
@@ -141,11 +142,14 @@ onMounted(() => {
   font-style: normal;
   font-weight: 300;
   line-height: normal;
-  margin-left: auto;
   cursor: pointer;
 }
 .sub-action:hover {
   color: #8d8d8d;
+}
+a {
+  text-decoration: none;
+  margin-left: auto;
 }
 .auth-content-action {
   width: 100%;
