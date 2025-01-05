@@ -6,6 +6,8 @@ import Decert from "@/views/decert.vue";
 import Closed from "@/views/closed.vue";
 import BasicAuth from "@/views/Auth/basicAuth.vue";
 import CodeSend from "@/views/Auth/codeSend.vue";
+import VerificationCode from "@/views/Auth/verificationCode.vue";
+import PasswordReset from "@/views/Auth/passwordReset.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -44,6 +46,37 @@ const router = createRouter({
       path: "/code",
       name: "codesend",
       component: CodeSend,
+      beforeEnter(to, from, next) {
+        if (from.name === "authontication") {
+          next();
+        } else {
+          next({ name: "authontication" });
+        }
+      },
+    },
+    {
+      path: "/verification",
+      name: "verification",
+      component: VerificationCode,
+      beforeEnter(to, from, next) {
+        if (from.name === "codesend") {
+          next();
+        } else {
+          next({ name: "authontication" });
+        }
+      },
+    },
+    {
+      name: "passwordreset",
+      path: "/passwordreset",
+      component: PasswordReset,
+      beforeEnter(to, from, next) {
+        if (from.name === "verification") {
+          next();
+        } else {
+          next({ name: "authontication" });
+        }
+      },
     },
   ],
   scrollBehavior(to, from, savedPosition) {

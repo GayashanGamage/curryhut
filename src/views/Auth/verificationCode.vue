@@ -3,15 +3,15 @@
     <Menubar></Menubar>
     <div class="space"></div>
     <div class="auth-window">
-      <div class="auth-head">YOUR MOBILE NUMBER</div>
+      <div class="auth-head">ENTER VERIFICATION CODE</div>
       <div class="auth-content">
         <input
           type="text"
           class="auth-content-input"
-          placeholder="Mobile number"
+          placeholder="Verification code"
         />
-        <button class="auth-content-action" @click="codeVerification">
-          Send Code
+        <button class="auth-content-action" @click="passwordreset">
+          Verify number
         </button>
       </div>
     </div>
@@ -25,8 +25,8 @@ import Footer from "@/components/common/footer.vue";
 import Menubar from "@/components/common/menubar.vue";
 import router from "@/router";
 
-const codeVerification = () => {
-  router.push({ name: "verification" });
+const passwordreset = () => {
+  router.push({ name: "passwordreset" });
 };
 </script>
 
@@ -86,9 +86,6 @@ const codeVerification = () => {
   line-height: normal;
   flex: 1 0 0;
   outline: none;
-}
-a {
-  text-decoration: none;
 }
 .auth-content-action {
   display: flex;

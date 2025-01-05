@@ -3,12 +3,17 @@
     <Menubar></Menubar>
     <div class="space"></div>
     <div class="auth-window">
-      <div class="auth-head">YOUR MOBILE NUMBER</div>
+      <div class="auth-head">RESET PASSWORD</div>
       <div class="auth-content">
         <input
           type="text"
           class="auth-content-input"
-          placeholder="Mobile number"
+          placeholder="New password"
+        />
+        <input
+          type="text"
+          class="auth-content-input"
+          placeholder="Re-enter password"
         />
         <button class="auth-content-action" @click="codeVerification">
           Send Code

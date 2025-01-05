@@ -1,3 +1,4 @@
+/* this include two basic auth (signin and signup) */
 <template>
   <main>
     <Menubar></Menubar>
@@ -112,7 +113,7 @@ onMounted(() => {
   width: 80%;
   flex-direction: column;
   align-items: center;
-  gap: 18px;
+  gap: 8px;
   margin-inline: auto;
 }
 .auth-input {
@@ -127,7 +128,7 @@ onMounted(() => {
   border: 1px solid #ababab;
   color: #ababab;
   flex: 1 0 0;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 300;
   outline: none;
 }
@@ -162,7 +163,7 @@ a {
   border-radius: 4px;
   background: #ff8f8f;
   color: #fff;
-  font-size: 20px;
+  font-size: 18px;
   font-style: normal;
   font-weight: 300;
   line-height: normal;
