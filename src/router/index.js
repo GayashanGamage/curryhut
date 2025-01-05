@@ -3,10 +3,16 @@ import HomeView from "../views/HomeView.vue";
 import Extra from "@/views/extra.vue";
 import Drinks from "@/views/drinks.vue";
 import Decert from "@/views/decert.vue";
+import Closed from "@/views/closed.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    {
+      path: "/closed",
+      name: "closed",
+      component: Closed,
+    },
     {
       path: "/",
       name: "home",
