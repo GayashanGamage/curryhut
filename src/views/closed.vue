@@ -41,7 +41,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { onBeforeMount, ref, watch } from "vue";
 import router from "@/router";
 
 // ui store import
@@ -83,6 +83,19 @@ watch(abc, (newValue) => {
     uiStore.openNotificationShowBefore
   ) {
     shopOpenNotification.value = true;
+  }
+});
+
+// when directly request close page, eveluate open and close time
+onBeforeMount(() => {
+  const [openHour, openMinute] = uiStore.shopOpen.split(":");
+  const [closeHour, closeMinute] = uiStore.shopClose.split(":");
+
+  const shopOpenInMinutes = openHour * 3600 + openMinute * 60;
+  const shopCloseInMinutes = closeHour * 3600 + closeMinute * 60;
+
+  if (abc.value < shopOpenInMinutes || abc.value < shopCloseInMinutes) {
+    router.push("/");
   }
 });
 </script>

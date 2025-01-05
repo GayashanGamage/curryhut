@@ -4,6 +4,7 @@ import Extra from "@/views/extra.vue";
 import Drinks from "@/views/drinks.vue";
 import Decert from "@/views/decert.vue";
 import Closed from "@/views/closed.vue";
+import BasicAuth from "@/views/Auth/basicAuth.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,6 +33,11 @@ const router = createRouter({
       path: "/decert",
       name: "decert",
       component: Decert,
+    },
+    {
+      path: "/auth",
+      name: "authontication",
+      component: BasicAuth,
     },
   ],
   scrollBehavior(to, from, savedPosition) {

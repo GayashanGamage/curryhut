@@ -436,7 +436,10 @@ export const useFoodStore = defineStore("food", () => {
   const uniqueCategories = [
     ...new Set(foodInfo.value.map((item) => item.categoryName)),
   ].filter(
-    (category) => !["rice&curry", "extra", "rice", "curry"].includes(category)
+    (category) =>
+      !["rice&curry", "extra", "rice", "curry", "drinks", "decert"].includes(
+        category
+      )
   );
 
   const selectedCategory = ref(0); //this is for identify the selected category

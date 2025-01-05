@@ -16,7 +16,9 @@
       <p class="menu-item">
         <router-link to="/drinks">drinks</router-link>
       </p>
-      <button class="action-button">Login</button>
+      <router-link to="/auth">
+        <button class="action-button">Login</button></router-link
+      >
       <span class="material-icons">local_mall</span>
     </div>
   </div>
@@ -77,6 +79,7 @@ a {
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+  cursor: pointer;
 }
 .action-button:hover {
   border: 1.5px solid #fff;
