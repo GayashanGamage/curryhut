@@ -16,7 +16,7 @@
       <p class="menu-item">
         <router-link to="/drinks">drinks</router-link>
       </p>
-      <router-link to="/auth">
+      <router-link to="/login">
         <button class="action-button">Login</button></router-link
       >
       <span class="material-icons">local_mall</span>

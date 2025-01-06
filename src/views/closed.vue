@@ -3,15 +3,15 @@
     <h1 class="site-title">Curry Hut</h1>
   </div>
   <div class="main">
-    <div class="message" v-if="!shopOpenNotification">
+    <div class="message">
       <H2 class="message-title">SORRY</H2>
       <p class="message-description">Tomorrow will be tasty sunday</p>
     </div>
-    <div class="content" v-if="!shopOpenNotification">
+    <div class="content">
       <div class="time-bar">
         <div class="time-container">
           <p class="time-description">we usually close</p>
-          <p class="time">22:00</p>
+          <p class="time">{{ uiStore.shopClose }}</p>
         </div>
         <hr class="devider" />
         <div class="time-container">
@@ -28,14 +28,9 @@
         <hr class="devider" />
         <div class="time-container">
           <p class="time-description">we open tommorow</p>
-          <p class="time">06:00</p>
+          <p class="time">{{ uiStore.shopOpen }}</p>
         </div>
       </div>
-    </div>
-    <div class="notification" v-if="shopOpenNotification">
-      <p class="notification-text">
-        we are going to open CurryHut 7:00 minutes
-      </p>
     </div>
   </div>
 </template>
@@ -68,21 +63,19 @@ setInterval(() => {
   seconds.value = abc.value % 60;
 }, 1000);
 
-/* remaining time notification for shop open feature */
-const shopOpenNotification = ref(false); // toggle between shop open notification and default time bar
-
 // watch difference of current time and open time - if that is less than 600 seconds, then show notification
 watch(abc, (newValue) => {
+  // open hour and minute
   const [openHour, openMinute] = uiStore.shopOpen.split(":");
   const shopOpenInMinutes = openHour * 3600 + openMinute * 60;
 
-  if (shopOpenInMinutes - newValue < 0) {
+  // close hour and minute
+  const [closeHour, closeMinute] = uiStore.shopClose.split(":");
+  const shopCloseInMinutes = closeHour * 3600 + closeMinute * 60;
+
+  // if current time is less than open time or greater than close time, then redirect to home page
+  if (shopOpenInMinutes - newValue < 0 && shopCloseInMinutes - newValue > 0) {
     router.push("/");
-  } else if (
-    shopOpenInMinutes - newValue <
-    uiStore.openNotificationShowBefore
-  ) {
-    shopOpenNotification.value = true;
   }
 });
 

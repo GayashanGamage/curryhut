@@ -3,21 +3,18 @@
     <Menubar></Menubar>
     <div class="space"></div>
     <div class="auth-window">
-      <div class="auth-head">RESET PASSWORD</div>
+      <div class="auth-head">Sign up</div>
       <div class="auth-content">
         <input
           type="text"
           class="auth-content-input"
-          placeholder="New password"
+          placeholder="Mobile number"
         />
-        <input
-          type="text"
-          class="auth-content-input"
-          placeholder="Re-enter password"
-        />
-        <button class="auth-content-action" @click="codeVerification">
-          Confirme
-        </button>
+        <input type="text" class="auth-content-input" placeholder="Password" />
+        <router-link to="/code">
+          <p class="sub-action">Forget password ?</p></router-link
+        >
+        <button class="auth-content-action">Sign up</button>
       </div>
     </div>
     <div class="space"></div>
@@ -28,11 +25,6 @@
 <script setup>
 import Footer from "@/components/common/footer.vue";
 import Menubar from "@/components/common/menubar.vue";
-import router from "@/router";
-
-const codeVerification = () => {
-  router.push({ name: "verification" });
-};
 </script>
 
 <style scoped>
@@ -92,9 +84,6 @@ const codeVerification = () => {
   flex: 1 0 0;
   outline: none;
 }
-a {
-  text-decoration: none;
-}
 .auth-content-action {
   display: flex;
   padding: 5px 6px;
@@ -111,5 +100,20 @@ a {
 }
 .auth-content-action:hover {
   background: #f57070;
+}
+a {
+  text-decoration: none;
+}
+.sub-action {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  color: #b6b2b2;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
+  cursor: pointer;
 }
 </style>

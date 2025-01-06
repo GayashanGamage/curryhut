@@ -8,6 +8,7 @@ import BasicAuth from "@/views/Auth/basicAuth.vue";
 import CodeSend from "@/views/Auth/codeSend.vue";
 import VerificationCode from "@/views/Auth/verificationCode.vue";
 import PasswordReset from "@/views/Auth/passwordReset.vue";
+import Login from "@/views/Auth/login.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -38,6 +39,11 @@ const router = createRouter({
       component: Decert,
     },
     {
+      path: "/login",
+      name: "login",
+      component: Login,
+    },
+    {
       path: "/auth",
       name: "authontication",
       component: BasicAuth,
@@ -47,7 +53,7 @@ const router = createRouter({
       name: "codesend",
       component: CodeSend,
       beforeEnter(to, from, next) {
-        if (from.name === "authontication") {
+        if (from.name === "authontication" || from.name === "login") {
           next();
         } else {
           next({ name: "authontication" });
