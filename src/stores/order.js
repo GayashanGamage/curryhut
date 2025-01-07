@@ -29,6 +29,27 @@ export const useOrderStore = defineStore("order", () => {
     },*/
   ]);
 
+  const summery = ref([
+    {
+      id: 101,
+      orderdate: "2021-09-01",
+      payment: "cash",
+      status: "pending",
+    },
+    {
+      id: 111,
+      orderdate: "2021-09-21",
+      payment: "card",
+      status: "complete",
+    },
+    {
+      id: 103,
+      orderdate: "2021-11-01",
+      payment: "card",
+      status: "complete",
+    },
+  ]);
+
   // check curryCount and disable curry availability
   watch(curryCount, (newCount) => {
     if (newCount == 4 || newCount >= 4) {
@@ -62,6 +83,7 @@ export const useOrderStore = defineStore("order", () => {
     // curryAvailability,
     order,
     temparyOrderItem,
+    summery,
     addToOrder,
   };
 });

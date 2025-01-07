@@ -11,6 +11,7 @@ import PasswordReset from "@/views/Auth/passwordReset.vue";
 import Login from "@/views/Auth/login.vue";
 import Order from "@/views/order.vue";
 import Test from "@/views/test.vue";
+import OrderSummery from "@/views/orderSummery.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -59,6 +60,11 @@ const router = createRouter({
       path: "/order",
       name: "order",
       component: Order,
+    },
+    {
+      path: "/ordersummery",
+      name: "ordersummery",
+      component: OrderSummery,
     },
     {
       path: "/code",

@@ -14,7 +14,12 @@
         <router-link to="/code">
           <p class="sub-action">Forget password ?</p></router-link
         >
-        <button class="auth-content-action">Sign up</button>
+        <button
+          class="auth-content-action"
+          @click="router.push('/ordersummery')"
+        >
+          Sign up
+        </button>
       </div>
     </div>
     <div class="space"></div>
@@ -25,6 +30,7 @@
 <script setup>
 import Footer from "@/components/common/footer.vue";
 import Menubar from "@/components/common/menubar.vue";
+import router from "@/router";
 </script>
 
 <style scoped>
