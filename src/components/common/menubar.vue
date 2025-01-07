@@ -19,7 +19,9 @@
       <router-link to="/login">
         <button class="action-button">Login</button></router-link
       >
-      <span class="material-icons">local_mall</span>
+      <router-link to="/order">
+        <span class="material-icons">local_mall</span>
+      </router-link>
     </div>
   </div>
 </template>

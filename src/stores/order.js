@@ -9,7 +9,7 @@ export const useOrderStore = defineStore("order", () => {
   // this is for the tempary selected item before add to the order list - rice and curry
   const temparyOrderItem = ref();
   /*{
-      itemid: 1,
+      itemid: 1, // check this is enter or not - foodview & rice and curry popups
       foodid: 1001,
       quantity: 1,
       name: "Chicken Kottu",
