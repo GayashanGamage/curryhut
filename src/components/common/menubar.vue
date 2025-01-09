@@ -16,8 +16,8 @@
       <p class="menu-item">
         <router-link to="/drinks">drinks</router-link>
       </p>
-      <router-link to="/login">
-        <button class="action-button">Login</button></router-link
+      <router-link to="/mobile">
+        <button class="action-button">Track order</button></router-link
       >
       <router-link to="/order">
         <span class="material-icons">local_mall</span>

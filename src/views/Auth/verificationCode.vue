@@ -3,14 +3,18 @@
     <Menubar></Menubar>
     <div class="space"></div>
     <div class="auth-window">
-      <div class="auth-head">ENTER VERIFICATION CODE</div>
+      <div class="auth-head">Verification Code</div>
       <div class="auth-content">
-        <input
-          type="text"
-          class="auth-content-input"
-          placeholder="Verification code"
-        />
-        <button class="auth-content-action" @click="passwordreset">
+        <div class="back" @click="router.push({ name: 'mobile' })">
+          <span class="material-icons">keyboard_backspace</span>
+          <p class="sub-action">Change mobile number</p>
+        </div>
+        <input type="text" class="auth-content-input" placeholder="xxxx" />
+        <p class="sub-action">Send again</p>
+        <button
+          class="auth-content-action"
+          @click="router.push({ name: 'checkout' })"
+        >
           Verify number
         </button>
       </div>
@@ -24,10 +28,6 @@
 import Footer from "@/components/common/footer.vue";
 import Menubar from "@/components/common/menubar.vue";
 import router from "@/router";
-
-const passwordreset = () => {
-  router.push({ name: "passwordreset" });
-};
 </script>
 
 <style scoped>
@@ -103,5 +103,28 @@ const passwordreset = () => {
 }
 .auth-content-action:hover {
   background: #f57070;
+}
+.sub-action {
+  color: #989898;
+  font-size: 13px;
+  cursor: pointer;
+}
+.back {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  cursor: pointer;
+  margin-right: auto;
+}
+.material-icons {
+  color: #989898;
+  font-weight: 200;
+}
+.back:hover .material-icons {
+  color: #ff5e5e;
+}
+.sub-action:hover {
+  color: #ff5e5e;
+  font-weight: 500;
 }
 </style>

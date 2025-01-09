@@ -5,21 +5,21 @@
     <div class="space"></div>
     <div class="order-window">
       <div class="order-head">
-        <p class="head" id="head-1">description</p>
-        <p class="head" id="head-2">quantity</p>
-        <p class="head" id="head-3">unit price</p>
-        <p class="head" id="head-4">sub total</p>
+        <p class="head cell1">description</p>
+        <p class="head cell2">quantity</p>
+        <p class="head cell3">unit price</p>
+        <p class="head cell4">sub total</p>
       </div>
       <hr class="devider" />
       <div class="order-item" v-for="(item, index) in mergedOrder" :key="index">
-        <div class="item-details">
+        <div class="item-details cell1">
           <img :src="item.image" :alt="item.name" class="item-image" />
           <div class="item-details-data">
             <p class="item-title">{{ item.name }}</p>
             <p class="item-description">{{ item.size }}</p>
           </div>
         </div>
-        <div class="item-quantity">
+        <div class="item-quantity cell2">
           <button
             class="item-quantity-action"
             @click="changeQuantity(index, 'up')"
@@ -35,15 +35,15 @@
             -
           </button>
         </div>
-        <p class="item-common">Rs.{{ item.price }}</p>
-        <p class="item-common">
+        <p class="item-common cell3">Rs.{{ item.price }}</p>
+        <p class="item-common cell4">
           Rs.{{ parseInt(item.price) * parseInt(item.quantity) }}
         </p>
         <span class="material-icons" @click="deleteItem(index)">delete</span>
       </div>
       <div
         class="unavailable-category"
-        v-if="!checkCategory.find((c) => c === 'desert')"
+        v-if="!checkCategory.find((c) => c === 'decert')"
         @click="router.push({ name: 'decert' })"
       >
         <p class="unavailable-category-title">DESERT</p>
@@ -79,7 +79,8 @@
       <hr class="devider" />
       <button
         class="order-action-button"
-        @click="router.push({ name: 'authontication' })"
+        @click="router.push({ name: 'mobile' })"
+        :disabled="checkoutButton"
       >
         CHECKOUT
       </button>
@@ -95,12 +96,12 @@ import Menubar from "@/components/common/menubar.vue";
 import router from "@/router";
 import { useFoodStore } from "@/stores/food";
 import { useOrderStore } from "@/stores/order";
-import { computed, onUpdated, ref, watch } from "vue";
+import { computed, onBeforeMount, onUpdated, ref, watch } from "vue";
 
 const foodStore = useFoodStore();
 const orderStore = useOrderStore();
 
-// const totalBill = ref(0);
+const checkoutButton = ref(true);
 
 // create tempary variable and store merge order data with product data
 const mergedOrder = computed(() => {
@@ -159,6 +160,24 @@ onUpdated(() => {
 const deleteItem = (index) => {
   orderStore.order.splice(index, 1);
 };
+
+// check if order store is empty, then disable checkout button
+watch(orderStore.order, (newValue) => {
+  if (newValue.length === 0) {
+    checkoutButton.value = true;
+  } else {
+    checkoutButton.value = false;
+  }
+});
+
+// check the order length and enable or disable checkout button when page initialized
+onBeforeMount(() => {
+  if (orderStore.order.length === 0) {
+    checkoutButton.value = true;
+  } else {
+    checkoutButton.value = false;
+  }
+});
 </script>
 
 <style scoped>
@@ -168,7 +187,7 @@ const deleteItem = (index) => {
 }
 .order-window {
   display: flex;
-  width: fit-content;
+  width: 50%;
   padding: 30px;
   flex-direction: column;
   justify-content: center;
@@ -186,7 +205,6 @@ const deleteItem = (index) => {
 .head {
   display: flex;
   align-items: center;
-  flex: 1 0 0;
 }
 .devider {
   width: 100%;
@@ -204,7 +222,6 @@ const deleteItem = (index) => {
   display: flex;
   align-items: flex-end;
   gap: 10px;
-  flex: 1 0 0;
 }
 .item-image {
   width: 90px;
@@ -252,7 +269,6 @@ const deleteItem = (index) => {
   font-style: normal;
   font-weight: 300;
   line-height: normal;
-  /* width: 84.895px; */
 }
 .material-icons {
   color: #d9d9d9;
@@ -312,5 +328,22 @@ const deleteItem = (index) => {
 }
 .order-action-button:hover {
   background: #f78d8d;
+}
+.order-action-button:disabled {
+  background: #d9d9d9;
+  color: #fff;
+  cursor: not-allowed;
+}
+.cell1 {
+  width: 40%;
+}
+.cell2 {
+  width: 20%;
+}
+.cell3 {
+  width: 20%;
+}
+.cell4 {
+  width: 10%;
 }
 </style>

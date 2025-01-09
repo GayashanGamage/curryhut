@@ -4,14 +4,13 @@ import Extra from "@/views/extra.vue";
 import Drinks from "@/views/drinks.vue";
 import Decert from "@/views/decert.vue";
 import Closed from "@/views/closed.vue";
-import BasicAuth from "@/views/Auth/basicAuth.vue";
-import CodeSend from "@/views/Auth/codeSend.vue";
+import mobile from "@/views/Auth/mobile.vue";
 import VerificationCode from "@/views/Auth/verificationCode.vue";
-import PasswordReset from "@/views/Auth/passwordReset.vue";
-import Login from "@/views/Auth/login.vue";
 import Order from "@/views/order.vue";
 import Test from "@/views/test.vue";
 import OrderSummery from "@/views/orderSummery.vue";
+import Checkout from "@/views/checkout.vue";
+import OrderType from "@/views/orderType.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -47,19 +46,14 @@ const router = createRouter({
       component: Decert,
     },
     {
-      path: "/login",
-      name: "login",
-      component: Login,
-    },
-    {
-      path: "/auth",
-      name: "authontication",
-      component: BasicAuth,
-    },
-    {
       path: "/order",
       name: "order",
       component: Order,
+    },
+    {
+      path: "/ordertype",
+      name: "ordertype",
+      component: OrderType,
     },
     {
       path: "/ordersummery",
@@ -67,40 +61,19 @@ const router = createRouter({
       component: OrderSummery,
     },
     {
-      path: "/code",
-      name: "codesend",
-      component: CodeSend,
-      beforeEnter(to, from, next) {
-        if (from.name === "authontication" || from.name === "login") {
-          next();
-        } else {
-          next({ name: "authontication" });
-        }
-      },
+      path: "/checkout",
+      name: "checkout",
+      component: Checkout,
+    },
+    {
+      path: "/mobile",
+      name: "mobile",
+      component: mobile,
     },
     {
       path: "/verification",
       name: "verification",
       component: VerificationCode,
-      beforeEnter(to, from, next) {
-        if (from.name === "codesend") {
-          next();
-        } else {
-          next({ name: "authontication" });
-        }
-      },
-    },
-    {
-      name: "passwordreset",
-      path: "/passwordreset",
-      component: PasswordReset,
-      beforeEnter(to, from, next) {
-        if (from.name === "verification") {
-          next();
-        } else {
-          next({ name: "authontication" });
-        }
-      },
     },
   ],
   scrollBehavior(to, from, savedPosition) {
