@@ -7,7 +7,6 @@ import Closed from "@/views/closed.vue";
 import mobile from "@/views/Auth/mobile.vue";
 import VerificationCode from "@/views/Auth/verificationCode.vue";
 import Order from "@/views/order.vue";
-import Test from "@/views/test.vue";
 import OrderSummery from "@/views/orderSummery.vue";
 import Checkout from "@/views/checkout.vue";
 import OrderType from "@/views/orderType.vue";
@@ -19,11 +18,6 @@ const router = createRouter({
       path: "/closed",
       name: "closed",
       component: Closed,
-    },
-    {
-      path: "/test",
-      name: "test",
-      component: Test,
     },
     {
       path: "/",
