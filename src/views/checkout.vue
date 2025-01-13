@@ -47,21 +47,22 @@
               <h4 class="title">Hometown</h4>
               <hr class="devider" />
             </div>
+            <!-- delivery locaiton -->
             <div class="radio-button-container">
               <div
                 class="radio-button"
-                v-for="item in deliveryLocations"
+                v-for="(item, index) in shopStore.deliveryLocations"
                 :key="item.id"
               >
                 <input
                   type="radio"
                   :id="item.id"
                   name="town"
-                  :value="item.value"
+                  :value="item.place"
                   class="radio-button-text"
-                  @click="deliveryFee = item.fee"
+                  @click="changeDeliveryLocation(index)"
                 />
-                <label :for="item.id">{{ item.text }}</label>
+                <label :for="item.id">{{ item.place }}</label>
               </div>
             </div>
             <div class="section-title">
@@ -157,7 +158,14 @@
         <hr class="cart-devider" />
         <div class="cart-summery">
           <p class="delivery">Delivery</p>
-          <p class="delivery">Rs {{ deliveryFee }}</p>
+          <p class="delivery">
+            Rs
+            {{
+              shopStore.selectDeliveryLocation == null
+                ? 0
+                : shopStore.selectDeliveryLocation.cost
+            }}
+          </p>
         </div>
         <hr class="cart-devider" />
         <div class="cart-summery">
@@ -186,18 +194,22 @@
 <script setup>
 import Footer from "@/components/common/footer.vue";
 import Menubar from "@/components/common/menubar.vue";
-import { computed, onBeforeMount, onMounted, ref, watch } from "vue";
+import { computed, onBeforeMount, ref, watch } from "vue";
 import { useFoodStore } from "@/stores/food";
 import { useOrderStore } from "@/stores/order";
 import router from "@/router";
+import { useShopStore } from "@/stores/shop";
+import axios from "axios";
 
+// use pinia stores
 const foodStore = useFoodStore();
 const orderStore = useOrderStore();
+const shopStore = useShopStore();
 
-const sendForOther = ref(false);
-const deliveryFee = ref(0);
-const checkout = ref(false);
+const sendForOther = ref(false); // this is for toggle between self order and order for others
+const checkout = ref(false); // this is for enable and disable checkout button
 
+// toggle between self order and order for others
 const sender = () => {
   const whoSend = document.getElementById("switch-rounded").checked;
   if (whoSend == false) {
@@ -206,50 +218,6 @@ const sender = () => {
     sendForOther.value = true;
   }
 };
-
-const deliveryLocations = ref([
-  {
-    id: "nawala",
-    value: "Nawala",
-    text: "Nawala",
-    fee: 100,
-  },
-  {
-    id: "kirulapana",
-    value: "Kirulapana",
-    text: "Kirulapana",
-    fee: 120,
-  },
-  {
-    id: "borella",
-    value: "Borella",
-    text: "Borella",
-    fee: 160,
-  },
-  {
-    id: "rajagiriya",
-    value: "Rajagiriya",
-    text: "Rajagiriya",
-    fee: 100,
-  },
-  {
-    id: "nugegoda",
-    value: "Nugegoda",
-    text: "Nugegoda",
-    fee: 100,
-  },
-  {
-    id: "borella",
-    value: "Borella",
-    text: "Borella",
-    fee: 100,
-  },
-  {
-    id: "other",
-    value: "Other",
-    text: "Other",
-  },
-]);
 
 // merge order data ( merge order and product data )
 const mergedOrder = computed(() => {
@@ -268,6 +236,11 @@ const mergedOrder = computed(() => {
   });
 });
 
+// change delivery location
+const changeDeliveryLocation = (index) => {
+  shopStore.selectDeliveryLocation = shopStore.deliveryLocations[index];
+};
+
 // initialize total bill using computed
 const totalBill = computed(() =>
   orderStore.order.reduce(
@@ -276,16 +249,20 @@ const totalBill = computed(() =>
   )
 );
 
-// set default delivery location and fee
-onMounted(() => {
-  document.getElementById(deliveryLocations.value[0].id).checked = true;
-  deliveryFee.value = deliveryLocations.value[0].fee;
-});
-
-// if no item in your cart - you cannot load this page
+// if no item in your cart - you cannot load this page and get delivery locations
 onBeforeMount(() => {
   if (orderStore.order.length == 0) {
     router.push({ name: "home" });
+  }
+  if (shopStore.deliveryLocations == null) {
+    axios
+      .get(`${import.meta.env.VITE_url}/delivery/get`)
+      .then((response) => {
+        shopStore.deliveryLocations = response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 });
 
