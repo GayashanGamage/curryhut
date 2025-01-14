@@ -11,24 +11,32 @@
       <div class="time-bar">
         <div class="time-container">
           <p class="time-description">we usually close</p>
-          <p class="time">{{ uiStore.shopClose }}</p>
+          <p class="time">
+            {{
+              String(new Date(uiStore.shopClose).getHours()).padStart(2, "0")
+            }}:{{
+              String(new Date(uiStore.shopClose).getMinutes()).padStart(2, "0")
+            }}
+          </p>
         </div>
         <hr class="devider" />
         <div class="time-container">
           <p class="time-description">it's now</p>
           <p class="time">
-            {{ hours.toString().padStart(2, "0") }} :
-            {{ minuts.toString().padStart(2, "0") }}
-            <span class="seconds">
-              :
-              {{ seconds.toString().padStart(2, "0") }}
-            </span>
+            {{ hours }}:{{ minuts }}
+            <span class="seconds">{{ String(seconds).padStart(2, "0") }}</span>
           </p>
         </div>
         <hr class="devider" />
         <div class="time-container">
           <p class="time-description">we open tommorow</p>
-          <p class="time">{{ uiStore.shopOpen }}</p>
+          <p class="time">
+            {{
+              String(new Date(uiStore.shopOpen).getHours()).padStart(2, "0")
+            }}:{{
+              String(new Date(uiStore.shopOpen).getMinutes()).padStart(2, "0")
+            }}
+          </p>
         </div>
       </div>
     </div>
@@ -36,8 +44,7 @@
 </template>
 
 <script setup>
-import { onBeforeMount, ref, watch } from "vue";
-import router from "@/router";
+import { ref } from "vue";
 
 // ui store import
 import { useUiStore } from "@/stores/ui";
@@ -63,34 +70,34 @@ setInterval(() => {
   seconds.value = abc.value % 60;
 }, 1000);
 
-// watch difference of current time and open time - if that is less than 600 seconds, then show notification
-watch(abc, (newValue) => {
-  // open hour and minute
-  const [openHour, openMinute] = uiStore.shopOpen.split(":");
-  const shopOpenInMinutes = openHour * 3600 + openMinute * 60;
+// // watch difference of current time and open time - if that is less than 600 seconds, then show notification
+// watch(abc, (newValue) => {
+//   // open hour and minute
+//   const [openHour, openMinute] = uiStore.shopOpen.split(":");
+//   const shopOpenInMinutes = openHour * 3600 + openMinute * 60;
 
-  // close hour and minute
-  const [closeHour, closeMinute] = uiStore.shopClose.split(":");
-  const shopCloseInMinutes = closeHour * 3600 + closeMinute * 60;
+//   // close hour and minute
+//   const [closeHour, closeMinute] = uiStore.shopClose.split(":");
+//   const shopCloseInMinutes = closeHour * 3600 + closeMinute * 60;
 
-  // if current time is less than open time or greater than close time, then redirect to home page
-  if (shopOpenInMinutes - newValue < 0 && shopCloseInMinutes - newValue > 0) {
-    router.push("/");
-  }
-});
+//   // if current time is less than open time or greater than close time, then redirect to home page
+//   if (shopOpenInMinutes - newValue < 0 && shopCloseInMinutes - newValue > 0) {
+//     router.push("/");
+//   }
+// });
 
-// when directly request close page, eveluate open and close time
-onBeforeMount(() => {
-  const [openHour, openMinute] = uiStore.shopOpen.split(":");
-  const [closeHour, closeMinute] = uiStore.shopClose.split(":");
+// // when directly request close page, eveluate open and close time
+// onBeforeMount(() => {
+//   const [openHour, openMinute] = uiStore.shopOpen.split(":");
+//   const [closeHour, closeMinute] = uiStore.shopClose.split(":");
 
-  const shopOpenInMinutes = openHour * 3600 + openMinute * 60;
-  const shopCloseInMinutes = closeHour * 3600 + closeMinute * 60;
+//   const shopOpenInMinutes = openHour * 3600 + openMinute * 60;
+//   const shopCloseInMinutes = closeHour * 3600 + closeMinute * 60;
 
-  if (abc.value < shopOpenInMinutes || abc.value < shopCloseInMinutes) {
-    router.push("/");
-  }
-});
+//   if (abc.value < shopOpenInMinutes || abc.value < shopCloseInMinutes) {
+//     router.push("/");
+//   }
+// });
 </script>
 
 <style scoped>

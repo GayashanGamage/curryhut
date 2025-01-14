@@ -10,6 +10,7 @@ import Order from "@/views/order.vue";
 import OrderSummery from "@/views/orderSummery.vue";
 import Checkout from "@/views/checkout.vue";
 import OrderType from "@/views/orderType.vue";
+import { useUiStore } from "@/stores/ui";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
