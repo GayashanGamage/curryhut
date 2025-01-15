@@ -1,28 +1,45 @@
 <template>
   <div class="tag-container">
     <div
-      v-for="(item, index) in foodStore.uniqueCategories"
-      :key="item"
+      v-for="(item, index) in foodStore.categories"
+      :key="item.id"
       @click="foodStore.selectedCategory = index"
       :class="['tag', foodStore.selectedCategory === index ? 'select' : '']"
     >
-      <p class="tag-name">{{ item }}</p>
+      <p class="tag-name">{{ item.name }}</p>
     </div>
   </div>
 </template>
 
 <script setup>
+import router from "@/router";
 import { useFoodStore } from "@/stores/food";
-import { onMounted } from "vue";
+import axios from "axios";
+import { onBeforeMount} from "vue";
+
+// pinia stores 
 const foodStore = useFoodStore();
 
-onMounted(() => {
-  foodStore.allSelectedCategoryItems = foodStore.foodInfo.filter(
-    (item) =>
-      item.categoryName ===
-      foodStore.uniqueCategories[foodStore.selectedCategory]
-  );
-});
+
+// request all main categories - if categories is null
+onBeforeMount(() => {
+  if(foodStore.categories == null){
+    axios.get(`${import.meta.env.VITE_url}/customer/cagegories`)
+    .then((response) => {
+      if(response.status == 200){
+        foodStore.categories = response.data;
+      }
+    })
+    .catch((error) => {
+      if(error.status == 404){
+        foodStore.categories = null;
+      }else if(error.status == 403){
+        router.push({name : 'closed'})
+      }
+    })
+  }
+})
+
 </script>
 
 <style scoped>

@@ -10,11 +10,19 @@ export const useUiStore = defineStore("ui", () => {
   const shopClose = ref(undefined);
   const isShopClosed = ref(false);
 
+  // product view
+  const categorySection = ref(false)
+  const mainProductSection = ref(false)
+  const budgetPackSection = ref(false)
+
   return {
     foodPopup,
     riceandcurryPopup,
     shopOpen,
     shopClose,
     isShopClosed,
+    categorySection,
+    mainProductSection,
+    budgetPackSection,
   };
 });
