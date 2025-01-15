@@ -10,13 +10,13 @@
     <div class="food-section">
       <div
         class="food-item"
-        v-for="(item, index) in foodstore.allSelectedCategoryItems"
+        v-for="(item, index) in foodstore.foodInfo"
         :key="item.id"
       >
-        <img :src="item.image" :alt="item.name + ' image'" class="food-image" />
+        <img src="https://curryhut.blr1.cdn.digitaloceanspaces.com/sample-images/koththu.webp" alt="image-name" class="food-image" />
         <h4 class="food-title">{{ item.name }}</h4>
         <p class="food-price">
-          Rs. {{ item.size[foodstore.selectedPotion].price }}
+          Rs. {{ item.price[foodstore.selectedPotion].portion }}
         </p>
         <button class="action-button" @click="selectFood(item, index)">
           view
@@ -30,14 +30,42 @@
 import { useFoodStore } from "@/stores/food";
 import { useOrderStore } from "@/stores/order";
 import { useUiStore } from "@/stores/ui";
-import { onBeforeUpdate, ref } from "vue";
+import axios from "axios";
+import { onBeforeMount, onBeforeUpdate, ref } from "vue";
 import { useRoute } from "vue-router";
 const route = useRoute();
 
+// pinia stores
 const orderStore = useOrderStore();
 const uiStore = useUiStore();
 const foodstore = useFoodStore();
 
+// get data from api - if food info is null
+onBeforeMount(() => {
+  if (foodstore.foodInfo === null) {
+    axios
+    .get(`${import.meta.env.VITE_url}/customer/`)
+    .then((response) => {
+      console.log(response.data);
+      if(response.data.availability === false){
+        uiStore.mainProductSection = false
+      }else if (response.data.availability === true){
+        uiStore.mainProductSection = true
+        foodstore.foodInfo = response.data.data;
+      }
+    })
+    .catch((error) => {
+      if (error.status === 403) {
+        uiStore.shopClose = error.response.data["close_time"];
+        uiStore.shopOpen = error.response.data["open_time"];
+        // route.push("/closed");
+      }
+    });
+  }
+});
+
+
+// select the food item
 const selectFood = (item, index) => {
   console.log(item);
   foodstore.selectedFood = index;
@@ -52,27 +80,28 @@ const selectFood = (item, index) => {
   uiStore.foodPopup = true;
 };
 
-const sectionTitile = ref();
-const titleToggle = ref(true);
+// const sectionTitile = ref();
+// const titleToggle = ref(true);
 
 // set the title for the component
-onBeforeUpdate(() => {
-  if (route.name === "extra") {
-    titleToggle.value = false;
-    sectionTitile.value = "Extra potion";
-  } else if (route.name === "drinks") {
-    titleToggle.value = false;
-    sectionTitile.value = "Drinks";
-  } else if (route.name === "decert") {
-    titleToggle.value = false;
-    sectionTitile.value = "Decerts";
-  } else {
-    titleToggle.value = true;
-    sectionTitile.value =
-      foodstore.uniqueCategories[foodstore.selectedCategory];
-  }
-});
+// onBeforeUpdate(() => {
+//   if (route.name === "extra") {
+//     titleToggle.value = false;
+//     sectionTitile.value = "Extra potion";
+//   } else if (route.name === "drinks") {
+//     titleToggle.value = false;
+//     sectionTitile.value = "Drinks";
+//   } else if (route.name === "decert") {
+//     titleToggle.value = false;
+//     sectionTitile.value = "Decerts";
+//   } else {
+//     titleToggle.value = true;
+//     sectionTitile.value =
+//       foodstore.uniqueCategories[foodstore.selectedCategory];
+//   }
+// });
 </script>
+
 <style scoped>
 .food-container {
   display: flex;

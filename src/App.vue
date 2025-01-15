@@ -3,27 +3,6 @@
 </template>
 
 <script setup>
-import { onBeforeMount } from "vue";
-import router from "./router";
-import axios from "axios";
-
-onBeforeMount(() => {
-  axios
-    .get(`${import.meta.env.VITE_url}/customer/`, {
-      params: {
-        id: "66ff86b140ba8d2eaa1eb88a",
-      },
-    })
-    .then((response) => {
-      console.log(response);
-      if (response.status === 403) {
-        router.push("/closed");
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-});
 </script>
 
 <style>
