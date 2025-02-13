@@ -8,15 +8,16 @@
     <div class="space"></div>
     <Foodsection></Foodsection>
     <div class="space"></div>
-    <!-- <Budgetpack></Budgetpack> -->
+    <Budgetpack></Budgetpack>
     <div class="space"></div>
     <Footer></Footer>
     <Foodview></Foodview>
-    <riceandcurryVue></riceandcurryVue>
+    <riceandcurryVue v-if="uiStore.riceandcurryPopup"></riceandcurryVue>
   </main>
 </template>
 
 <script setup>
+// 1️⃣ import necesary packages
 import Footer from "@/components/common/footer.vue";
 import Menubar from "@/components/common/menubar.vue";
 import Budgetpack from "@/components/home_page/budgetpack.vue";
@@ -26,7 +27,36 @@ import Mainbanner from "@/components/home_page/mainbanner.vue";
 // popup import
 import Foodview from "@/components/popup/foodview.vue";
 import riceandcurryVue from "@/components/popup/riceandcurry.vue";
+import { useFoodStore } from "@/stores/food";
+import { useUiStore } from "@/stores/ui";
+import axios from "axios";
+import { onBeforeMount } from "vue";
+const foodStore = useFoodStore();
 
+// 2️⃣ reactive variables
+const uiStore = useUiStore()
+
+
+
+// 3️⃣ computed properties
+// 4️⃣ watches
+// 5️⃣ lifecycle hooks
+
+// 6️⃣ methods
+onBeforeMount(() => {
+  if(foodStore.plainRice == null || foodStore.curry == null || foodStore.ricePack == null){
+    axios.get(`${import.meta.env.VITE_url}/customer/riceAndCurry`)
+    .then((response) => {
+      foodStore.plainRice = response.data.rice
+      foodStore.curry = response.data.curry 
+      foodStore.ricePack = response.data['rice&curry']
+    })
+    .catch((error) => {
+      console.log('this is an error')
+    })
+  }
+
+})
 
 </script>
 

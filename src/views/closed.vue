@@ -44,11 +44,42 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
+import axios from "axios";
+import router from "@/router";
+import { useUiStore } from "@/stores/ui";
+import { useFoodStore } from "@/stores/food";
 
 // ui store import
-import { useUiStore } from "@/stores/ui";
 const uiStore = useUiStore();
+const foodstore = useFoodStore();
+
+const redirect = () => {
+  router.push('/');
+}
+
+
+onMounted(() => {
+  if(uiStore.shopOpen == null){
+    axios
+    .get(`${import.meta.env.VITE_url}/customer/`)
+    .then((response) => {
+      if(response.status == 200){
+        foodstore.foodInfo = response.data.data;
+        uiStore.mainProductSection = true
+        uiStore.categorySection = true
+        redirect()
+      }
+    })
+    .catch((error) => {
+      if (error.status === 403) {
+        uiStore.shopClose = error.response.data["close_time"];
+        uiStore.shopOpen = error.response.data["open_time"];
+      }
+    });
+  }
+});
+
 
 // get current time
 const abc = ref(

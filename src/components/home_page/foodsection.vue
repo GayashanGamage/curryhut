@@ -27,13 +27,13 @@
 </template>
 
 <script setup>
+import router from "@/router";
 import { useFoodStore } from "@/stores/food";
 import { useOrderStore } from "@/stores/order";
 import { useUiStore } from "@/stores/ui";
 import axios from "axios";
 import { onBeforeMount, onBeforeUpdate, ref } from "vue";
-import { useRoute } from "vue-router";
-const route = useRoute();
+
 
 // pinia stores
 const orderStore = useOrderStore();
@@ -46,7 +46,6 @@ onBeforeMount(() => {
     axios
     .get(`${import.meta.env.VITE_url}/customer/`)
     .then((response) => {
-      console.log(response.data);
       if(response.data.availability === false){
         uiStore.mainProductSection = false
       }else if (response.data.availability === true){
@@ -58,7 +57,7 @@ onBeforeMount(() => {
       if (error.status === 403) {
         uiStore.shopClose = error.response.data["close_time"];
         uiStore.shopOpen = error.response.data["open_time"];
-        // route.push("/closed");
+        router.push("/closed");
       }
     });
   }
@@ -67,7 +66,6 @@ onBeforeMount(() => {
 
 // select the food item
 const selectFood = (item, index) => {
-  console.log(item);
   foodstore.selectedFood = index;
   // setting the tempary order item
   orderStore.temparyOrderItem = {

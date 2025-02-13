@@ -9,10 +9,10 @@
       <h3 class="title">Budget Pack</h3>
       <p class="description">Rice and curry</p>
       <div class="content-container">
-        <div class="content-item" v-for="item in riceandcurry" :key="item.id">
+        <div class="content-item" v-for="item in foodStore.ricePack" :key="item.id">
           <p class="item-description">{{ item.name }}</p>
-          <p class="item-price">Rs.{{ item.price }}</p>
-          <button class="item-action" @click="openPopup(item)">
+          <p class="item-price">Rs.{{ item.price[0].price }}</p>
+          <button class="item-action" @click="openPopup(item.id)">
             Select curries
           </button>
         </div>
@@ -30,21 +30,10 @@ const uiStore = useUiStore();
 const orderStore = useOrderStore();
 const foodStore = useFoodStore();
 
-const riceandcurry = computed(() =>
-  foodStore.foodInfo.filter((item) => item.categoryName === "rice&curry")
-);
 
-const openPopup = (item) => {
+const openPopup = (id) => {
   uiStore.riceandcurryPopup = true;
-  orderStore.temparyOrderItem = {
-    foodid: item.id,
-    name: item.name,
-    quantity: 1,
-    price: item.price,
-    special: item.special,
-    rice: "white rice",
-    curry: [],
-  };
+  foodStore.selectedRicePack = foodStore.ricePack.find((item) => item.id == id)
 };
 </script>
 
