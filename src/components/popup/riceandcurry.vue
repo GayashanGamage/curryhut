@@ -37,30 +37,30 @@
             <div class="summery-column">
               <p class="column-title">Porsion size</p>
               <div class="column-data">
-                <button class="column-button" v-for="i in foodstore.selectedRicePack.price" :key="i">{{ i.name }}</button>
+                  <button class="column-button" v-for="item in foodstore.selectedRicePack.price" :key="item.name">{{ item.name }}</button>
               </div>
             </div>
             <!-- column 02 -->
             <div class="summery-column">
               <p class="column-title">Plate count</p>
               <div class="column-data">
-                <button class="column-button">+</button>
+                <button class="column-button" @click="packCount += 1">+</button>
                 <p>{{ packCount }}</p>
-                <button class="column-button">-</button>
+                <button class="column-button" @click="packCount -= 1">-</button>
               </div>
             </div>
             <!-- column 03 -->
             <div class="summery-column">
               <p class="column-title">Total Price</p>
               <div class="column-data">
-                <p>{{ packCount * foodstore.selectedRicePack.price[0].price }}</p>
+                <p v-for="item in foodstore.selectedRicePack.price" :key="item.name">{{ packCount * item.price }}</p>
               </div>
             </div>
           </div>
         </div>
         <hr class="section-head-devider">
         <div class="button-section">
-          <button class="action-button">Cancel</button>
+          <button class="action-button"  @click="closePopup">Cancel</button>
           <button class="action-button">Confirm</button>
         </div>
       </div>
@@ -83,10 +83,20 @@ const minCurry = ref(3);
 const packCount = ref(1)
 
 // watches
+watch(packCount,(newVal) => {
+  if(newVal <= 1){
+    packCount.value = 1
+  }
+})
+
 
 // function
-onClickOutside(target, (onclick) => {
+const closePopup = () => {
   uistore.riceandcurryPopup = false
+}
+
+onClickOutside(target, (onclick) => {
+  closePopup()
 })
 
 </script>
@@ -252,9 +262,6 @@ onClickOutside(target, (onclick) => {
   font-weight: 400;
 }
 </style>
-
-
-
 
 
 

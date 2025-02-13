@@ -11,7 +11,7 @@
       <div class="content-container">
         <div class="content-item" v-for="item in foodStore.ricePack" :key="item.id">
           <p class="item-description">{{ item.name }}</p>
-          <!-- <p class="item-price">Rs.{{ item.price[0].price }}</p> -->
+          <p class="item-price" v-for="item in foodStore.selectedRicePack.price" :key="item.name">Rs.{{ item.pricexxx }}</p>
           <button class="item-action" @click="openPopup(item.id)">
             Select curries
           </button>
