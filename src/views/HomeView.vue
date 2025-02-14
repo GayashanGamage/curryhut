@@ -8,7 +8,7 @@
     <div class="space"></div>
     <Foodsection></Foodsection>
     <div class="space"></div>
-    <Budgetpack></Budgetpack>
+    <Budgetpack v-if="uiStore.bugetPack"></Budgetpack>
     <div class="space"></div>
     <Footer></Footer>
     <Foodview></Foodview>
@@ -30,7 +30,7 @@ import riceandcurryVue from "@/components/popup/riceandcurry.vue";
 import { useFoodStore } from "@/stores/food";
 import { useUiStore } from "@/stores/ui";
 import axios from "axios";
-import { onBeforeMount } from "vue";
+import { onBeforeMount, watch } from "vue"; 
 const foodStore = useFoodStore();
 
 // 2️⃣ reactive variables
@@ -40,24 +40,16 @@ const uiStore = useUiStore()
 
 // 3️⃣ computed properties
 // 4️⃣ watches
+
+
 // 5️⃣ lifecycle hooks
 
 // 6️⃣ methods
 onBeforeMount(() => {
   if(foodStore.plainRice == null || foodStore.curry == null || foodStore.ricePack == null){
-    axios.get(`${import.meta.env.VITE_url}/customer/riceAndCurry`)
-    .then((response) => {
-      foodStore.plainRice = response.data.rice
-      foodStore.curry = response.data.curry 
-      foodStore.ricePack = response.data['rice&curry']
-    })
-    .catch((error) => {
-      console.log('this is an error')
-    })
+    foodStore.getFoodList()
   }
-
 })
-
 </script>
 
 <style scoped>

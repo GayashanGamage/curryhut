@@ -15,6 +15,9 @@ export const useUiStore = defineStore("ui", () => {
   const mainProductSection = ref(false)
   const budgetPackSection = ref(false)
 
+  // componennt visibility
+  const bugetPack = ref(false)
+
   return {
     foodPopup,
     riceandcurryPopup,
@@ -24,5 +27,6 @@ export const useUiStore = defineStore("ui", () => {
     categorySection,
     mainProductSection,
     budgetPackSection,
+    bugetPack
   };
 });

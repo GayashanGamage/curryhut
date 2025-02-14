@@ -11,7 +11,7 @@
               <div class="item" v-for="i in foodstore.plainRice" :key="i.id">
                 <p class="item-name">{{ i.name }}</p>
                 <p class="red-notice" v-if="!i.availability">out of stock</p>
-                <button class="itme-button">Add</button>
+                <button class="rice-button" :id="i.id" :disabled="!i.availability" @click="addRice(i.id)">Add</button>
               </div>
             </div>
           </div>
@@ -24,7 +24,7 @@
               <div class="item" v-for="i in foodstore.curry" :key="i.id">
                 <p class="item-name">{{ i.name }}</p>
                 <p class="red-notice"  v-if="!i.availability">out of stock</p>
-                <button class="itme-button">Add</button>
+                <button class="curry-button" :id="i.id" :disabled="!i.availability" @click="addCurry(i.id)">Add</button>
               </div>
             </div>
           </div>
@@ -33,35 +33,37 @@
           <div class="section-head">
             <h4 class="section-title">summery</h4>
             <hr class="section-head-devider">
+            <!-- TODO: load size of food -->
             <!-- column 01 -->
-            <div class="summery-column">
+            <!-- <div class="summery-column">
               <p class="column-title">Porsion size</p>
               <div class="column-data">
-                  <button class="column-button" v-for="(item, index) in foodstore.selectedRicePack.price" :key="item.name" @click="verityOption = index">{{ item.name }}</button>
+                  <button class="column-button" v-for="(item, index) in foodstore.selectedRicePack.price" :key="item.index" @click="verityOptionNumber = index">{{ item.name }}</button>
               </div>
-            </div>
+            </div> -->
             <!-- column 02 -->
             <div class="summery-column">
               <p class="column-title">Plate count</p>
               <div class="column-data">
-                <button class="column-button" @click="packCount += 1">+</button>
-                <p>{{ packCount }}</p>
-                <button class="column-button" @click="packCount -= 1">-</button>
+                <button class="column-button" @click="changeQuntity('up')">+</button>
+                <p>{{ orderstore.temparyOrderItem.quantity }}</p>
+                <button class="column-button" @click="changeQuntity('down')">-</button>
               </div>
             </div>
+            <!-- TODO: load total price -->
             <!-- column 03 -->
-            <div class="summery-column">
+            <!-- <div class="summery-column">
               <p class="column-title">Total Price</p>
               <div class="column-data">
-                <p>{{ packCount * foodstore.selectedRicePack.price[verityOption].price }}</p>
+                <p>{{ packCount * foodstore.selectedRicePack.price[verityOptionNumber].price }}</p>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
         <hr class="section-head-devider">
         <div class="button-section">
           <button class="action-button"  @click="closePopup">Cancel</button>
-          <button class="action-button">Confirm</button>
+          <button class="action-button" @click="confirm">Confirm</button>
         </div>
       </div>
     </div>
@@ -70,9 +72,11 @@
 <script setup>
 // imports
 import { useFoodStore } from '@/stores/food';
+import { useOrderStore } from '@/stores/order';
 import { useUiStore } from '@/stores/ui';
 import { onClickOutside } from '@vueuse/core';
-import { ref, watch } from 'vue';
+import { onBeforeMount, onBeforeUnmount, ref } from 'vue';
+import { useToast } from 'vue-toast-notification';
 
 // reactive variables
 const target = ref(null)
@@ -80,16 +84,30 @@ const uistore = useUiStore()
 const foodstore =  useFoodStore()
 const maxCurry = ref(4);
 const minCurry = ref(3);
-const verityOption = ref(0)
-const packCount = ref(1)
+const verityOptions = ref(null)
+// const packCount = ref(1)
+const orderstore = useOrderStore()
+const notification = useToast()
 
-// watches
-watch(packCount,(newVal) => {
-  if(newVal <= 1){
-    packCount.value = 1
+
+
+// lifecycle hooks
+// TODO: add category id to this - ( this should came from database, otherwise hardcode )
+onBeforeMount(() => {
+  if(orderstore.temparyOrderItem == null){
+    orderstore.temparyOrderItem = {
+      'id' : foodstore.selectedRicePack.id,
+      'rice' : null,
+      'curry' : [],
+      'price' : null,
+      'quantity' : 1
+    }
   }
 })
 
+onBeforeUnmount(() => {
+  orderstore.temparyOrderItem = null
+})
 
 // function
 const closePopup = () => {
@@ -99,6 +117,87 @@ const closePopup = () => {
 onClickOutside(target, (onclick) => {
   closePopup()
 })
+
+// add rice fucntionality -------- supportives
+function removeAllSelectedRice(){
+  const allButtons = document.getElementsByClassName('rice-button') // all rice buttons
+  for(let i = 0; i < allButtons.length; i++){
+    allButtons[i].classList.remove('select') // remove select class
+    allButtons[i].textContent = 'Add' // change text 
+  }
+}
+
+// add rice functionality -------- main 
+const addRice = (id) => {
+  removeAllSelectedRice()
+  const element = document.getElementById(id) // selected element
+  element.textContent = 'Selected' // change text content
+  element.classList.add('select') // add select class
+  orderstore.temparyOrderItem.rice = id // add selected rice
+}
+
+// add curry fucntionality -------- supportives
+function removeAllSelectedCurry(){
+  const allButtons = document.getElementsByClassName('curry-button')
+  for(let i = 0; i < allButtons.length; i++){
+    allButtons[i].classList.remove('select') // remove select class
+    allButtons[i].textContent = 'Add' // change text 
+  }
+}
+
+function checkCurryList(id){
+  const allredyIn = ref(false)
+  for(let i = 0; i < orderstore.temparyOrderItem.curry.length; i++){
+    if(orderstore.temparyOrderItem.curry[i] == id){
+      orderstore.temparyOrderItem.curry.splice(i, 1)
+      allredyIn.value = true
+    }
+  }
+  if(allredyIn.value == false){
+    if(orderstore.temparyOrderItem.curry.length >= maxCurry.value){
+      orderstore.temparyOrderItem.curry.shift()
+      orderstore.temparyOrderItem.curry.push(id)
+    }else{
+      orderstore.temparyOrderItem.curry.push(id)
+    }
+  }
+}
+
+function showSelectedCurries(){
+  for(let i = 0; i < orderstore.temparyOrderItem.curry.length; i++){
+    const element = document.getElementById(orderstore.temparyOrderItem.curry[i])
+    element.textContent = 'Selected'
+    element.classList.add('select')
+  }
+}
+
+// add curry functionality -------- main
+const addCurry = (id) => {
+  removeAllSelectedCurry() // remove all selected curry style and text content of the button 
+  checkCurryList(id) // check 'id' currry is already in the list
+  showSelectedCurries()  
+}
+
+function changeQuntity(action){
+  if(action == 'up'){
+    orderstore.temparyOrderItem.quantity += 1
+  }else if(action == 'down'){
+    if(orderstore.temparyOrderItem.quantity > 1){
+      orderstore.temparyOrderItem.quantity -= 1
+    }
+  }
+}
+
+// confirm the order
+function confirm (){
+  if(orderstore.temparyOrderItem.rice != null && orderstore.temparyOrderItem.curry.length == maxCurry.value){
+    notification.success('Order added to the cart')
+    uistore.riceandcurryPopup = false
+  }else{
+    notification.error('Please select rice and 4 curries')
+  }
+}
+
 
 </script>
 
@@ -201,7 +300,8 @@ onClickOutside(target, (onclick) => {
   line-height: normal;
   margin-top: 10px;
 }
-.itme-button{
+/* curry action button */
+.curry-button{
   display: flex;
   width: 98%;
   height: 35%;
@@ -210,14 +310,50 @@ onClickOutside(target, (onclick) => {
   align-items: center;
   flex-shrink: 0;
   border-radius: 4px;
-  background: #FF8F8F;
+  background-color: var(--button-default);
   border: 0px;
   color: #FFF;
   font-size: 14px;
   font-weight: 400;
 }
+.curry-button:hover{
+  background-color: var(--button-hover);
+}
+.curry-button:active{
+  background-color: var(--button-select);
+}
+.curry-button:disabled{
+  background-color: var(--button-deactivate);
+  cursor: not-allowed;
+}
+/* rice action button */
+.rice-button{
+  display: flex;
+  width: 98%;
+  height: 35%;
+  padding: 6px 83px;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  border-radius: 4px;
+  background-color: var(--button-default);
+  border: 0px;
+  color: #FFF;
+  font-size: 14px;
+  font-weight: 400;
+}
+.rice-button:hover{
+  background-color: var(--button-hover);
+}
+.rice-button:active{
+  background-color: var(--button-select);
+}
+.rice-button:disabled{
+  background-color: var(--button-deactivate);
+  cursor: not-allowed;
+}
 .red-notice{
-  background-color: #FF8F8F;
+  background-color: var(--notice-red);
   color: #FFF;
   padding: 2px 20px;
   font-size: 12px;
@@ -242,9 +378,18 @@ onClickOutside(target, (onclick) => {
   gap: 8px;
   border-radius: 4px;
   background: #FFF;
-  border: 1px solid #FF8F8F;
-  color: #FF8F8F;
+  border: 1px solid var(--text-color-defalut-button);
+  color: var(--text-color-defalut-button);
   font-size: 15px;
+}
+.column-button:hover{
+  background-color: var(--button-default);
+  border: 1px solid var(--button-default);
+  color: var(--text-color-primary);
+}
+.column-button:active{
+  background-color: var(--button-select);
+  border: 1px solid var(--button-select);
 }
 .button-section{
   display: flex;
@@ -253,37 +398,35 @@ onClickOutside(target, (onclick) => {
 }
 .action-button{
   border-radius: 4px;
-  border: 1.5px solid #FF8F8F;
+  border: 1.5px solid var(--button-select);
   background: #FFF;
   width: 121px;
   height: 33px;
   flex-shrink: 0;
-  color: #FF8F8F;
+  color: var(--text-color-defalut-button);
   font-size: 14px;
   font-weight: 400;
 }
-</style>
-
-
-
-
-{
-  id : 'weoifjoijfw',
-  name : 'owiefjow',
-  price : [
-    {
-      name : 'aa',
-      portion : 1,
-      price : 2000
-    },
-    {
-      name : 'aa',
-      portion : 1,
-      price : 2000
-    },
-  ],
-  availability : true
+.action-button:hover{
+  background-color: var(--button-default);
+  border: 1px solid var(--button-default);
+  color: var(--text-color-primary);
 }
+.action-button:active{
+  background-color: var(--button-select);
+  border: 1px solid var(--button-select);
+}
+.action-button:disabled{
+  background-color: var(--button-deactivate);
+  cursor: not-allowed;
+  color: var(--text-color-primary);
+  border: 1px solid var(--button-deactivate);
+}
+.select {
+  background-color: var(--button-select);
+}
+
+</style>
 
 
 

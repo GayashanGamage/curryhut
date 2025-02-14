@@ -23,21 +23,7 @@ const foodStore = useFoodStore();
 
 // request all main categories - if categories is null
 onBeforeMount(() => {
-  if(foodStore.categories == null){
-    axios.get(`${import.meta.env.VITE_url}/customer/cagegories`)
-    .then((response) => {
-      if(response.status == 200){
-        foodStore.categories = response.data;
-      }
-    })
-    .catch((error) => {
-      if(error.status == 404){
-        foodStore.categories = null;
-      }else if(error.status == 403){
-        router.push({name : 'closed'})
-      }
-    })
-  }
+  foodStore.getAllCategory()
 })
 
 </script>
