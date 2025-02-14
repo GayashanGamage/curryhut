@@ -37,7 +37,7 @@
             <div class="summery-column">
               <p class="column-title">Porsion size</p>
               <div class="column-data">
-                  <button class="column-button" v-for="item in foodstore.selectedRicePack.price" :key="item.name">{{ item.name }}</button>
+                  <button class="column-button" v-for="(item, index) in foodstore.selectedRicePack.price" :key="item.name" @click="verityOption = index">{{ item.name }}</button>
               </div>
             </div>
             <!-- column 02 -->
@@ -53,7 +53,7 @@
             <div class="summery-column">
               <p class="column-title">Total Price</p>
               <div class="column-data">
-                <p v-for="item in foodstore.selectedRicePack.price" :key="item.name">{{ packCount * item.price }}</p>
+                <p>{{ packCount * foodstore.selectedRicePack.price[verityOption].price }}</p>
               </div>
             </div>
           </div>
@@ -80,6 +80,7 @@ const uistore = useUiStore()
 const foodstore =  useFoodStore()
 const maxCurry = ref(4);
 const minCurry = ref(3);
+const verityOption = ref(0)
 const packCount = ref(1)
 
 // watches
@@ -266,7 +267,23 @@ onClickOutside(target, (onclick) => {
 
 
 
-
+{
+  id : 'weoifjoijfw',
+  name : 'owiefjow',
+  price : [
+    {
+      name : 'aa',
+      portion : 1,
+      price : 2000
+    },
+    {
+      name : 'aa',
+      portion : 1,
+      price : 2000
+    },
+  ],
+  availability : true
+}
 
 
 
