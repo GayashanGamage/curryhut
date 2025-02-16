@@ -2,7 +2,7 @@
   <main>
     <Menubar></Menubar>
     <div class="space"></div>
-    <Foodsection></Foodsection>
+    <Foodsection :foodList = foodStore.extra_portion></Foodsection>
     <div class="space"></div>
     <Footer></Footer>
     <Foodview></Foodview>
@@ -23,11 +23,11 @@ import { onMounted, ref, watch } from "vue";
 
 // use stors
 const foodStore = useFoodStore();
-const orderStore = useOrderStore();
+// const orderStore = useOrderStore();
 
 
 onMounted(() => {
-  if(foodStore.drinks == null){
+  if(foodStore.extra_portion == null){
     axios.get(`${import.meta.env.VITE_url}/customer/category/67b1baa519f60cfa444a0afc`)
     .then((response) => {
       foodStore.extra_portion = response.data.data

@@ -31,25 +31,32 @@ import { useFoodStore } from "@/stores/food";
 import { useUiStore } from "@/stores/ui";
 import axios from "axios";
 import { onBeforeMount, watch } from "vue"; 
+
+// pinia stores
+const uiStore = useUiStore()
 const foodStore = useFoodStore();
 
+
 // 2️⃣ reactive variables
-const uiStore = useUiStore()
-
-
 
 // 3️⃣ computed properties
 // 4️⃣ watches
 
 
 // 5️⃣ lifecycle hooks
-
-// 6️⃣ methods
 onBeforeMount(() => {
   if(foodStore.plainRice == null || foodStore.curry == null || foodStore.ricePack == null){
     foodStore.getFoodList()
   }
 })
+
+onBeforeMount(() => {
+  if (foodStore.foodInfo === null) {
+    foodStore.getAllDeletableFoods()
+  }
+});
+
+// 6️⃣ methods
 </script>
 
 <style scoped>

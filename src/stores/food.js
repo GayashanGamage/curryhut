@@ -2,6 +2,7 @@ import { ref, computed, watch } from "vue";
 import { defineStore } from "pinia";
 import axios from "axios";
 import { useUiStore } from "./ui";
+import router from "@/router";
 
 export const useFoodStore = defineStore("food", () => {
   // other pinia stores
@@ -57,6 +58,29 @@ export const useFoodStore = defineStore("food", () => {
   }
   }
 
+  // get all deletable foods accoring to timly manner
+  function getAllDeletableFoods(){
+    onBeforeMount(() => {
+        axios
+        .get(`${import.meta.env.VITE_url}/customer/`)
+        .then((response) => {
+          if(response.data.availability === false){
+            uiStore.mainProductSection = false
+          }else if (response.data.availability === true){
+            uiStore.mainProductSection = true
+            foodInfo.value = response.data.data;
+          }
+        })
+        .catch((error) => {
+          if (error.status === 403) {
+            uiStore.shopClose = error.response.data["close_time"];
+            uiStore.shopOpen = error.response.data["open_time"];
+            router.push("/closed");
+          }
+        });
+    });
+  }
+
 
 
   return {
@@ -83,6 +107,7 @@ export const useFoodStore = defineStore("food", () => {
     // functions
     getFoodList,
     getAllCategory,
+    getAllDeletableFoods,
   };
 });
 

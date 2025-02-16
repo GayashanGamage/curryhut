@@ -2,7 +2,7 @@
   <main>
     <Menubar></Menubar>
     <div class="space"></div>
-    <Foodsection></Foodsection>
+    <Foodsection :foodList = foodStore.decert></Foodsection>
     <div class="space"></div>
     <Footer></Footer>
     <Foodview></Foodview>
@@ -26,7 +26,7 @@ const foodStore = useFoodStore();
 const orderStore = useOrderStore();
 
 onMounted(() => {
-  if(foodStore.drinks == null){
+  if(foodStore.decert == null){
     axios.get(`${import.meta.env.VITE_url}/customer/category/670cbd156e6b240be2d189e6`)
     .then((response) => {
       foodStore.decert = response.data.data

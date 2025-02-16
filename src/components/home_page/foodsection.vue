@@ -1,16 +1,16 @@
 <template>
   <div class="food-container">
-    <h3 class="container-title" v-if="titleToggle">
+    <!-- <h3 class="container-title" v-if="titleToggle">
       {{ foodstore.uniqueCategories[foodstore.selectedCategory] }}
     </h3>
     <h3 class="container-title" v-if="!titleToggle">
       {{ sectionTitile }}
     </h3>
-    <hr class="container-devider" />
+    <hr class="container-devider" /> -->
     <div class="food-section">
       <div
         class="food-item"
-        v-for="(item, index) in foodstore.foodInfo"
+        v-for="(item, index) in foodList"
         :key="item.id"
       >
         <img src="https://curryhut.blr1.cdn.digitaloceanspaces.com/sample-images/koththu.webp" alt="image-name" class="food-image" />
@@ -27,12 +27,18 @@
 </template>
 
 <script setup>
-import router from "@/router";
+// import router from "@/router";
 import { useFoodStore } from "@/stores/food";
 import { useOrderStore } from "@/stores/order";
 import { useUiStore } from "@/stores/ui";
-import axios from "axios";
-import { onBeforeMount, onBeforeUpdate, ref } from "vue";
+// import axios from "axios";
+// import { onBeforeMount } from "vue";
+
+// props
+defineProps({
+  // TODO: add defalt value as a empty array - []
+  foodList : Array
+})
 
 
 // pinia stores
@@ -41,41 +47,43 @@ const uiStore = useUiStore();
 const foodstore = useFoodStore();
 
 // get data from api - if food info is null
-onBeforeMount(() => {
-  if (foodstore.foodInfo === null) {
-    axios
-    .get(`${import.meta.env.VITE_url}/customer/`)
-    .then((response) => {
-      if(response.data.availability === false){
-        uiStore.mainProductSection = false
-      }else if (response.data.availability === true){
-        uiStore.mainProductSection = true
-        foodstore.foodInfo = response.data.data;
-      }
-    })
-    .catch((error) => {
-      if (error.status === 403) {
-        uiStore.shopClose = error.response.data["close_time"];
-        uiStore.shopOpen = error.response.data["open_time"];
-        router.push("/closed");
-      }
-    });
-  }
-});
+// onBeforeMount(() => {
+//   if (foodstore.foodInfo === null) {
+//     axios
+//     .get(`${import.meta.env.VITE_url}/customer/`)
+//     .then((response) => {
+//       if(response.data.availability === false){
+//         uiStore.mainProductSection = false
+//       }else if (response.data.availability === true){
+//         uiStore.mainProductSection = true
+//         foodstore.foodInfo = response.data.data;
+//       }
+//     })
+//     .catch((error) => {
+//       if (error.status === 403) {
+//         uiStore.shopClose = error.response.data["close_time"];
+//         uiStore.shopOpen = error.response.data["open_time"];
+//         router.push("/closed");
+//       }
+//     });
+//   }
+// });
 
 
 // select the food item
 const selectFood = (item, index) => {
-  foodstore.selectedFood = index;
+  console.log(item, index)
   // setting the tempary order item
-  orderStore.temparyOrderItem = {
-    foodid: item.id,
-    name: item.name,
-    price: item.size[foodstore.selectedPotion].price,
-    quantity: 1,
-    size: item.size[foodstore.selectedPotion].name,
-  };
-  uiStore.foodPopup = true;
+  // TODO: uncomment bellow code for functionality
+  // foodstore.selectedFood = index;
+  // orderStore.temparyOrderItem = {
+  //   foodid: item.id,
+  //   name: item.name,
+  //   price: item.size[foodstore.selectedPotion].price,
+  //   quantity: 1,
+  //   size: item.size[foodstore.selectedPotion].name,
+  // };
+  // uiStore.foodPopup = true;
 };
 
 // const sectionTitile = ref();
