@@ -6,7 +6,7 @@
     <div class="space"></div>
     <Foodtags></Foodtags>
     <div class="space"></div>
-    <Foodsection></Foodsection>
+    <Foodsection :foodList = foodStore.selectedFoodCategoryList></Foodsection>
     <div class="space"></div>
     <Budgetpack v-if="uiStore.bugetPack"></Budgetpack>
     <div class="space"></div>
@@ -24,32 +24,39 @@ import Budgetpack from "@/components/home_page/budgetpack.vue";
 import Foodsection from "@/components/home_page/foodsection.vue";
 import Foodtags from "@/components/home_page/foodtags.vue";
 import Mainbanner from "@/components/home_page/mainbanner.vue";
+import { useFoodStore } from "@/stores/food";
+import { useUiStore } from "@/stores/ui";
+import { onBeforeMount, ref, watch } from "vue"; 
+
 // popup import
 import Foodview from "@/components/popup/foodview.vue";
 import riceandcurryVue from "@/components/popup/riceandcurry.vue";
-import { useFoodStore } from "@/stores/food";
-import { useUiStore } from "@/stores/ui";
-import axios from "axios";
-import { onBeforeMount, watch } from "vue"; 
 
 // pinia stores
 const uiStore = useUiStore()
 const foodStore = useFoodStore();
 
-
 // 2️⃣ reactive variables
+const selectedDeletableFoodCategory = ref([])
+
 
 // 3️⃣ computed properties
 // 4️⃣ watches
+watch(foodStore.selectedCategoryId, (newId) => {
+  console.log(newId)
+  selectedDeletableFoodCategory.value = foodStore.foodInfo.filter((food) => food.category_id === newId)
+})
 
 
 // 5️⃣ lifecycle hooks
+// load rice and curries according to the timely manner
 onBeforeMount(() => {
   if(foodStore.plainRice == null || foodStore.curry == null || foodStore.ricePack == null){
     foodStore.getFoodList()
   }
 })
 
+// load deletable foods acoording to the timely manner
 onBeforeMount(() => {
   if (foodStore.foodInfo === null) {
     foodStore.getAllDeletableFoods()

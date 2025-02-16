@@ -3,7 +3,7 @@
     <div
       v-for="(item, index) in foodStore.categories"
       :key="item.id"
-      @click="foodStore.selectedCategory = index"
+      @click="changeCategory(index, item.id)"
       :class="['tag', foodStore.selectedCategory === index ? 'select' : '']"
     >
       <p class="tag-name">{{ item.name }}</p>
@@ -25,6 +25,14 @@ const foodStore = useFoodStore();
 onBeforeMount(() => {
   foodStore.getAllCategory()
 })
+
+// function -----------------------------------------
+// change category by it's id
+function changeCategory(index, id){
+  foodStore.selectedCategory = index
+  foodStore.selectedCategoryId = id
+  foodStore.selectedFoodCategoryList  = foodStore.foodInfo.filter((food) => food.category_id === id)
+}
 
 </script>
 
