@@ -11,6 +11,11 @@ export const useFoodStore = defineStore("food", () => {
   const categories = ref(null);
   const availableCategoryList = ref(null) // all category came with foods
 
+  // undeletable section
+  const drinks = ref(null)
+  const decert = ref(null)
+  const extra_portion = ref(null)
+
   const selectedCategory = ref(0); //this is for identify the selected category
   const selectedFood = ref(null); //this is for identify the selected food item index form 'allSelectedCategoryItems'
   const selectedPotion = ref(0); //this is for identify the selected potion
@@ -21,9 +26,6 @@ export const useFoodStore = defineStore("food", () => {
   const curry = ref(null)
   const ricePack = ref(null)
   const selectedRicePack = ref(null)
-
-  // watches
-
 
   // functions
   function getFoodList(){
@@ -63,6 +65,11 @@ export const useFoodStore = defineStore("food", () => {
     availableCategoryList,
     selectedFood,
     selectedPotion,
+
+    // undeletable section
+    drinks,
+    decert,
+    extra_portion,
 
     plainRice,
     curry,
