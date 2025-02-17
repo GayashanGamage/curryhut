@@ -36,12 +36,10 @@ export const useFoodStore = defineStore("food", () => {
     axios
     .get(`${import.meta.env.VITE_url}/customer/`)
     .then((response) => {
-      if(response.data.availability === false){
-        uiStore.mainProductSection = false
-      }else if (response.data.availability === true){
-        uiStore.mainProductSection = true
         foodInfo.value = response.data.data;
-      }
+        categories.value = response.data.categories;
+        selectedCategoryId.value = categories.value[0].id
+        changeCategory(0, categories.value[0].id)
     })
     .catch((error) => {
       if (error.status === 403) {
@@ -67,42 +65,10 @@ export const useFoodStore = defineStore("food", () => {
     })
   }
 
-  function sortCategories(categoryList) {
-    categories.value = [
-      ...new Map(
-        foodInfo.value
-          .map(food => {
-            let category = categoryList.find(category => category.id === food.category_id);
-            return category ? { id: category.id, name: category.name } : null;
-          })
-          .filter(item => item !== null) // Remove null values
-          .map(item => [item.id, item]) // Convert to key-value pairs for Map
-      ).values() // Extract unique values
-    ];
-    selectedCategoryId.value = categories.value[0].id
-    selectedFoodCategoryList.value  = foodInfo.value.filter((food) => food.category_id === categories.value[0].id)
-}
-
-
-
-  function getAllCategory(){
-    if(categories.value == null){
-      axios.get(`${import.meta.env.VITE_url}/customer/cagegories`)
-      .then((response) => {
-        if(response.status == 200){
-          // categories.value = response.data;
-          if(foodInfo.value != null){
-            sortCategories(response.data)
-          }else{
-            getAllDeletableFoods()
-          }
-          sortCategories(response.data)
-        }
-      })
-      .catch((error) => { 
-        console.log(error)
-    })
-  }
+  function changeCategory(index, id){
+    selectedCategory.value = index
+    selectedCategoryId.value = id
+    selectedFoodCategoryList.value  = foodInfo.value.filter((food) => food.category_id === id)
   }
 
   watch(selectedCategoryId.value, (newId) => {
@@ -116,7 +82,6 @@ export const useFoodStore = defineStore("food", () => {
   return {
     foodInfo,
     categories,
-    // availableCategoryList,
     selectedFood,
     selectedPotion,
     selectedCategoryId,
@@ -139,7 +104,7 @@ export const useFoodStore = defineStore("food", () => {
 
     // functions
     getFoodList,
-    getAllCategory,
     getAllDeletableFoods,
+    changeCategory,
   };
 });

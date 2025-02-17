@@ -12,7 +12,7 @@ export const useUiStore = defineStore("ui", () => {
 
   // product view
   const categorySection = ref(false)
-  const mainProductSection = ref(false)
+  // const mainProductSection = ref(false)
   const budgetPackSection = ref(false)
 
   // componennt visibility
@@ -25,7 +25,7 @@ export const useUiStore = defineStore("ui", () => {
     shopClose,
     isShopClosed,
     categorySection,
-    mainProductSection,
+    // mainProductSection,
     budgetPackSection,
     bugetPack
   };

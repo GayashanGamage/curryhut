@@ -3,7 +3,7 @@
     <div
       v-for="(item, index) in foodStore.categories"
       :key="item.id"
-      @click="changeCategory(index, item.id)"
+      @click="foodStore.changeCategory(index, item.id)"
       :class="['tag', foodStore.selectedCategory === index ? 'select' : '']"
     >
       <p class="tag-name">{{ item.name }}</p>
@@ -12,28 +12,10 @@
 </template>
 
 <script setup>
-import router from "@/router";
 import { useFoodStore } from "@/stores/food";
-import axios from "axios";
-import { onBeforeMount} from "vue";
 
 // pinia stores 
 const foodStore = useFoodStore();
-
-
-// request all main categories - if categories is null
-onBeforeMount(() => {
-  foodStore.getAllCategory()
-})
-
-// function -----------------------------------------
-// change category by it's id
-function changeCategory(index, id){
-  foodStore.selectedCategory = index
-  foodStore.selectedCategoryId = id
-  foodStore.selectedFoodCategoryList  = foodStore.foodInfo.filter((food) => food.category_id === id)
-}
-
 </script>
 
 <style scoped>
