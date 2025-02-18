@@ -8,26 +8,12 @@ export const useOrderStore = defineStore("order", () => {
 
   // this is for the tempary selected item before add to the order list - rice and curry
   const temparyOrderItem = ref();
-  /*{
-      itemid: 1, // check this is enter or not - foodview & rice and curry popups
-      foodid: 1001,
-      quantity: 1,
-      name: "Chicken Kottu",
-      price: 350,
-      size : '';
-      rice : 'white'
-      curry : [id, id, id]
-    },*/
 
   // this is for the order list
-  const order = ref([
-    /*{
-      id: 1,
-      name: "Chicken Kottu",
-      price: 350,
-      quantity: 1,
-    },*/
-  ]);
+  const order = ref([]);
+
+  // controll order count 
+  const orderCount = ref(0); 
 
   const summery = ref([
     {
@@ -67,6 +53,7 @@ export const useOrderStore = defineStore("order", () => {
     }
   });
 
+
   const addToOrder = () => {
     order.value.push(temparyOrderItem.value);
     temparyOrderItem.value = undefined;
@@ -82,6 +69,7 @@ export const useOrderStore = defineStore("order", () => {
     curryCount,
     // curryAvailability,
     order,
+    orderCount,
     temparyOrderItem,
     summery,
     addToOrder,

@@ -21,12 +21,33 @@
       >
       <router-link to="/order">
         <span class="material-icons">local_mall</span>
+        <span class="oreder-count" v-if="orderStore.orderCount">
+        {{ orderStore.orderCount }}</span>
       </router-link>
     </div>
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { useOrderStore } from "@/stores/order";
+import { watch } from "vue";
+
+
+const orderStore = useOrderStore(); 
+
+watch(orderStore.order,(newVal) => {
+  if(newVal.length > 0 && newVal.length < 10){
+    orderStore.orderCount = newVal.length;
+    orderStore.moreOrder = false;
+  }else if(newVal.length >= 10){
+    orderStore.orderCount = '+9';
+  }else if(newVal.length === 0){
+    orderStore.orderCount = 0;
+  }
+})
+
+
+</script>
 
 <style scoped>
 .main-container {
@@ -91,5 +112,11 @@ a {
 .material-icons {
   color: #fff;
   cursor: pointer;
+}
+.oreder-count{
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 50px;
+  border: 2px solid #fff;
 }
 </style>
