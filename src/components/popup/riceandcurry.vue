@@ -89,22 +89,6 @@ const verityOptions = ref(null)
 const orderstore = useOrderStore()
 const notification = useToast()
 
-
-
-// lifecycle hooks
-// TODO: add category id to this - ( this should came from database, otherwise hardcode )
-onBeforeMount(() => {
-  if(orderstore.temparyOrderItem == null){
-    orderstore.temparyOrderItem = {
-      'id' : foodstore.selectedRicePack.id,
-      'rice' : null,
-      'curry' : [],
-      'price' : null,
-      'quantity' : 1
-    }
-  }
-})
-
 onBeforeUnmount(() => {
   orderstore.temparyOrderItem = null
 })
@@ -191,6 +175,7 @@ function changeQuntity(action){
 // confirm the order
 function confirm (){
   if(orderstore.temparyOrderItem.rice != null && orderstore.temparyOrderItem.curry.length == maxCurry.value){
+    orderstore.order.push(orderstore.temparyOrderItem)
     notification.success('Order added to the cart')
     uistore.riceandcurryPopup = false
   }else{

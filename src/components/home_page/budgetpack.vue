@@ -12,7 +12,7 @@
         <div class="content-item" v-for="item in foodStore.ricePack" :key="item.id">
           <p class="item-description">{{ item.name }}</p>
           <p class="red-notice" v-if="!item.availability">out of stock</p>
-          <button class="item-action" @click="openPopup(item.id)" :disabled="!item.availability">
+          <button class="item-action" @click="openPopup(item)" :disabled="!item.availability">
             Select curries
           </button>
         </div>
@@ -31,8 +31,17 @@ const orderStore = useOrderStore();
 const foodStore = useFoodStore();
 
 
-const openPopup = (id) => {
-  foodStore.selectedRicePack = foodStore.ricePack.find((item) => item.id == id)
+const openPopup = (food) => {
+  foodStore.selectedRicePack = foodStore.ricePack.find((item) => item.id == food.id)
+  orderStore.temparyOrderItem = {
+      'id' : food.id,
+      'category_id' : food.category_id,
+      'name' : food.name,
+      'rice' : null,
+      'curry' : [],
+      'price' : food.price[0].price,
+      'quantity' : 1
+    }
   uiStore.riceandcurryPopup = true;
 };
 </script>

@@ -9,6 +9,7 @@
         <p class="head cell2">quantity</p>
         <p class="head cell3">unit price</p>
         <p class="head cell4">sub total</p>
+        <p class="head cell5"></p>
       </div>
       <hr class="devider" />
       <div class="order-item" v-for="(item, index) in orderStore.order" :key="index">
@@ -17,6 +18,8 @@
           <div class="item-details-data">
             <p class="item-title">{{ item.name }}</p>
             <p class="item-description">{{ item.size }}</p>
+            <p class="item-description" v-if="item.rice"><span class="rice-tag">{{ getRice(item.rice) }}</span> with</p>
+            <p class="item-description curry-bucket" v-if="item.curry"><span class="curry-tag" v-for="i in item.curry" :key="i">{{ getCurrry(i) }}</span></p>
           </div>
         </div>
         <div class="item-quantity cell2">
@@ -95,12 +98,14 @@
 import Footer from "@/components/common/footer.vue";
 import Menubar from "@/components/common/menubar.vue";
 import router from "@/router";
+import { useFoodStore } from "@/stores/food";
 // import { useFoodStore } from "@/stores/food";
 import { useOrderStore } from "@/stores/order";
 import { computed, onBeforeMount, onUpdated, ref, watch } from "vue";
 
 // pinia stores
 const orderStore = useOrderStore();
+const foodstore = useFoodStore();
 
 // other reactive variables
 const checkoutButton = ref(true);
@@ -149,6 +154,15 @@ const totalBill = computed(() =>
 //     0
 //   );
 // });
+
+function getRice(id) {
+  console.log(id)
+  return foodstore.plainRice.find((item) => item.id == id).name
+}
+
+function getCurrry(id){
+  return foodstore.curry.find((item) => item.id == id).name
+}
 
 // delete item in order store
 const deleteItem = (index) => {
@@ -209,7 +223,7 @@ onBeforeMount(() => {
 .order-item {
   display: flex;
   align-items: flex-end;
-  gap: 54px;
+  /* gap: 30px; */
   align-self: stretch;
 }
 .item-details {
@@ -240,6 +254,7 @@ onBeforeMount(() => {
   display: flex;
   align-items: center;
   gap: 12px;
+  justify-self: stretch;
 }
 .item-quantity-action {
   display: flex;
@@ -329,15 +344,39 @@ onBeforeMount(() => {
   cursor: not-allowed;
 }
 .cell1 {
-  width: 40%;
+  width: 56%;
 }
 .cell2 {
-  width: 20%;
+  width: 15%;
 }
 .cell3 {
-  width: 20%;
+  width: 15%;
 }
 .cell4 {
   width: 10%;
+}
+.cell5 {
+  width: 2%;
+}
+.rice-tag{
+  background-color: #fb8500;
+  color: #fff;
+  padding: 1px 15px;
+  border-radius: 20px;
+  font-size: 12px;
+}
+.curry-bucket{
+  margin-top: 4px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 2px;
+}
+.curry-tag{
+  color: #fff;
+  background-color: #335c67;
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: 12px;
 }
 </style>
