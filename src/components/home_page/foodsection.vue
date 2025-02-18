@@ -16,9 +16,9 @@
         <img src="https://curryhut.blr1.cdn.digitaloceanspaces.com/sample-images/koththu.webp" alt="image-name" class="food-image" />
         <h4 class="food-title">{{ item.name }}</h4>
         <p class="food-price">
-          Rs. {{ item.price[foodstore.selectedPotion].portion }}
+          Rs. {{ item.price[0].portion }}
         </p>
-        <button class="action-button" @click="selectFood(item, index)">
+        <button class="action-button" @click="selectFood(item.id, index)">
           view
         </button>
       </div>
@@ -27,14 +27,22 @@
 </template>
 
 <script setup>
-// import router from "@/router";
+/*
+HOW THIS WORK
+  1. this is common component to drinks, decerts, extra potions and deletable other categories ( koththu, biriyani )
+  2. load data from this parent component 
+  3. onece user click on the 'action button', it should open the 'foodview' popup
+  4. to open food item view popup, data get from foodstore - selectedFood ( entire food items' data should be store there )
+  5. this item also should load to orderStore - temparyOrderItem ( this is the item that user going to add to the cart )
+  6. foodstore.selectedPotion - this is for track witch price & size select by customer
+*/
+
+// import necesary packages --------------------------------
 import { useFoodStore } from "@/stores/food";
 import { useOrderStore } from "@/stores/order";
 import { useUiStore } from "@/stores/ui";
-// import axios from "axios";
-// import { onBeforeMount } from "vue";
 
-// props
+// define props --------------------------------------------
 defineProps({
   // TODO: add defalt value as a empty array - []
   foodList : Array
@@ -46,66 +54,23 @@ const orderStore = useOrderStore();
 const uiStore = useUiStore();
 const foodstore = useFoodStore();
 
-// get data from api - if food info is null
-// onBeforeMount(() => {
-//   if (foodstore.foodInfo === null) {
-//     axios
-//     .get(`${import.meta.env.VITE_url}/customer/`)
-//     .then((response) => {
-//       if(response.data.availability === false){
-//         uiStore.mainProductSection = false
-//       }else if (response.data.availability === true){
-//         uiStore.mainProductSection = true
-//         foodstore.foodInfo = response.data.data;
-//       }
-//     })
-//     .catch((error) => {
-//       if (error.status === 403) {
-//         uiStore.shopClose = error.response.data["close_time"];
-//         uiStore.shopOpen = error.response.data["open_time"];
-//         router.push("/closed");
-//       }
-//     });
-//   }
-// });
-
-
+// functions -----------------------------------------------
 // select the food item
 const selectFood = (item, index) => {
-  console.log(item, index)
-  // setting the tempary order item
-  // TODO: uncomment bellow code for functionality
-  // foodstore.selectedFood = index;
-  // orderStore.temparyOrderItem = {
-  //   foodid: item.id,
-  //   name: item.name,
-  //   price: item.size[foodstore.selectedPotion].price,
-  //   quantity: 1,
-  //   size: item.size[foodstore.selectedPotion].name,
-  // };
-  // uiStore.foodPopup = true;
+  foodstore.selectedFood = foodstore.foodInfo.find((food) => food.id === item )
+  orderStore.temparyOrderItem = {
+    'id' : foodstore.selectedFood.id,
+    'category_id' : foodstore.selectedFood.category_id,
+    'name' : foodstore.selectedFood.name,
+    'price' : foodstore.selectedFood.price[foodstore.selectedPotion].price,
+    'quantity' : 1,
+    'size' : foodstore.selectedFood.price[foodstore.selectedPotion].name  
+  }
+  foodstore.portion = foodstore.selectedFood.price[foodstore.selectedPotion].portion
+  foodstore.price = foodstore.selectedFood.price[foodstore.selectedPotion].price
+  uiStore.foodPopup = true;
 };
 
-// const sectionTitile = ref();
-// const titleToggle = ref(true);
-
-// set the title for the component
-// onBeforeUpdate(() => {
-//   if (route.name === "extra") {
-//     titleToggle.value = false;
-//     sectionTitile.value = "Extra potion";
-//   } else if (route.name === "drinks") {
-//     titleToggle.value = false;
-//     sectionTitile.value = "Drinks";
-//   } else if (route.name === "decert") {
-//     titleToggle.value = false;
-//     sectionTitile.value = "Decerts";
-//   } else {
-//     titleToggle.value = true;
-//     sectionTitile.value =
-//       foodstore.uniqueCategories[foodstore.selectedCategory];
-//   }
-// });
 </script>
 
 <style scoped>

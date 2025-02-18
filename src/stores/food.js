@@ -17,13 +17,18 @@ export const useFoodStore = defineStore("food", () => {
   const decert = ref(null)
   const extra_portion = ref(null)
   
-  const selectedCategory = ref(0); //this is for identify the selected category for styling
+  const selectedCategory = ref(0); //this is for identify the selected category for styling ( css )
   const selectedCategoryId = ref(null); // this is use for load the selected category food items
-  const selectedFood = ref(null); //this is for identify the selected food item index form 'allSelectedCategoryItems'
+  const selectedFood = ref(null); //this is for identify the selected food item. load product related data into this.
   const selectedPotion = ref(0); //this is for identify the selected potion
-  const allSelectedCategoryItems = ref([]);
-  const selectedFoodCategoryList = ref(null)
+  // const allSelectedCategoryItems = ref([]);
+  const selectedFoodCategoryList = ref(null) //this is for load data into 
   
+  // data from food view popup
+  const portion = ref(0)
+  const price = ref(0)
+
+
   // rice and curry section
   const plainRice = ref(null)
   const curry = ref(null)
@@ -87,6 +92,10 @@ export const useFoodStore = defineStore("food", () => {
     selectedCategoryId,
     selectedFoodCategoryList,
 
+    // data from food view popup
+    portion,
+    price,
+
     // undeletable section
     drinks,
     decert,
@@ -100,7 +109,7 @@ export const useFoodStore = defineStore("food", () => {
 
     // uniqueCategories,
     selectedCategory,
-    allSelectedCategoryItems,
+    // allSelectedCategoryItems,
 
     // functions
     getFoodList,

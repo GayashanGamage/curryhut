@@ -2,45 +2,42 @@
   <div class="main-popup" v-if="uiStore.foodPopup">
     <div class="popup-window" ref="target">
       <img
-        :src="foodStore.allSelectedCategoryItems[foodStore.selectedFood].image"
         alt="rice and curry"
+        src="https://curryhut.blr1.cdn.digitaloceanspaces.com/sample-images/koththu.webp"
         class="image"
       />
       <div class="popup-content">
         <h3 class="window-title">
-          {{ foodStore.allSelectedCategoryItems[foodStore.selectedFood].name }}
+          {{ foodStore.selectedFood.name }}
         </h3>
         <p class="description">
-          {{
-            foodStore.allSelectedCategoryItems[foodStore.selectedFood]
-              .description
-          }}
+          {{ foodStore.selectedFood.description }}
         </p>
-        <div class="sub-section">
-          <h4 class="section-title">Size</h4>
-          <hr class="sub-section-devider" />
-          <div class="sub-section-container">
-            <button
-              v-for="(item, index) in foodStore.allSelectedCategoryItems[
-                foodStore.selectedFood
-              ].size"
-              :key="item"
-              @click="changeFoodSize(index)"
-              :class="[
-                'action-button',
-                foodStore.selectedPotion === index
-                  ? 'action-button-select'
-                  : '',
-              ]"
-            >
-              {{ item.name }}
-            </button>
+        <div class="sub-section-portion">
+          <div class="sub-sub-section">
+            <h4 class="section-title">Size</h4>
+            <hr class="sub-section-devider" />
+            <div class="button-container">
+              <button
+                v-for="(item, index) in foodStore.selectedFood.price"
+                :key="item.name"
+                @click="changeFoodSize(item, index)"
+                :class="[
+                  'action-button',
+                  foodStore.selectedPotion === index
+                    ? 'action-button-select'
+                    : '',
+                ]"
+                >
+                {{ item.name }}
+              </button>  
+            </div>
+          </div>
+          <div class="sub-sub-section">
+            <h4 class="section-title">Enought</h4>
+            <hr class="sub-section-devider" />
             <p class="portion">
-              {{
-                foodStore.allSelectedCategoryItems[foodStore.selectedFood].size[
-                  foodStore.selectedPotion
-                ].portion
-              }}
+              for {{ foodStore.price }} person
             </p>
           </div>
         </div>
@@ -48,12 +45,7 @@
           <h4 class="section-title">Price</h4>
           <hr class="sub-section-devider" />
           <p class="price">
-            Rs.
-            {{
-              foodStore.allSelectedCategoryItems[foodStore.selectedFood].size[
-                foodStore.selectedPotion
-              ].price
-            }}
+            Rs.{{ foodStore.portion }}
           </p>
         </div>
         <div class="sub-section">
@@ -75,22 +67,40 @@
   </div>
 </template>
 
+
 <script setup>
+/*
+HOW THIS WORK
+  1. load data from food store - selectedFood
+  2. load same data to order store - temparyOrderItem
+  3. price and size change in order store - temparyOrderItem
+  4. all ui designs base on food store - selectedFood
+*/
+console.log('try to fetch')
+// import necesary packages
 import { useFoodStore } from "@/stores/food";
 import { useOrderStore } from "@/stores/order";
 import { useUiStore } from "@/stores/ui";
 import { onClickOutside } from "@vueuse/core";
 import { ref } from "vue";
 import { useToast } from "vue-toast-notification";
+
+// reactive variables ---------------------------------
+// define pinia stores
 const foodStore = useFoodStore();
 const orderStore = useOrderStore();
 const uiStore = useUiStore();
 
+// define notification
 const toast = useToast();
 
 // outside click refference
 const target = ref(null);
 
+const portion = ref(0)
+const price = ref(0)
+
+// functions ------------------------------------------
 // remove tempary order item when popup closed
 const removeTemparyOrderItem = () => {
   orderStore.temparyOrderItem = undefined;
@@ -101,6 +111,8 @@ const removeTemparyOrderItem = () => {
 // outside click and close the popup
 onClickOutside(target, (onclick) => {
   uiStore.foodPopup = false;
+  foodStore.portion = 0
+  foodStore.price = 0
   removeTemparyOrderItem();
 });
 
@@ -128,15 +140,20 @@ const quntityChange = (type) => {
   }
 };
 
-const changeFoodSize = (index) => {
+const changeFoodSize = (item, index) => {
+  console.log(index)
+  // set css animation of the selected portion
   foodStore.selectedPotion = index;
-  orderStore.temparyOrderItem.price =
-    foodStore.allSelectedCategoryItems[foodStore.selectedFood].size[
-      index
-    ].price;
-  orderStore.temparyOrderItem.size =
-    foodStore.allSelectedCategoryItems[foodStore.selectedFood].size[index].name;
+
+  // change the price and poortion in the popup window
+  foodStore.price = item.price
+  foodStore.portion = item.portion
+
+  // change the price and poortion in the order store
+  orderStore.temparyOrderItem.price = item.price
+  orderStore.temparyOrderItem.size = item.name
 };
+
 </script>
 
 <style scoped>
@@ -196,6 +213,14 @@ const changeFoodSize = (index) => {
   gap: 6px;
   align-self: stretch;
 }
+/* efected */
+.sub-section-portion {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 40px;
+  align-self: stretch;
+}
 .sub-section-container {
   display: flex;
   flex-direction: column;
@@ -243,10 +268,10 @@ const changeFoodSize = (index) => {
 }
 .portion {
   color: #ff5e5e;
-  font-size: 14px;
+  font-size: 16px;
   font-style: normal;
   font-weight: 600;
-  line-height: normal;
+  line-height: 50px;
 }
 .price {
   color: #000;
@@ -307,5 +332,11 @@ const changeFoodSize = (index) => {
 }
 .cart-button:active {
   background: #ff5e5e;
+}
+.button-container{
+  margin-block: 8px;
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
 }
 </style>
