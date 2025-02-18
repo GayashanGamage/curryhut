@@ -6,7 +6,7 @@
     <div class="space"></div>
     <Foodtags></Foodtags>
     <div class="space"></div>
-    <Foodsection :foodList = foodStore.selectedFoodCategoryList></Foodsection>
+    <Foodsection :foodList = foodStore.selectedFoodCategoryList foodStoreVariable = 'foodInfo'></Foodsection>
     <div class="space"></div>
     <Budgetpack v-if="uiStore.bugetPack"></Budgetpack>
     <div class="space"></div>

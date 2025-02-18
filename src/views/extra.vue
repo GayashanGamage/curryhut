@@ -2,7 +2,7 @@
   <main>
     <Menubar></Menubar>
     <div class="space"></div>
-    <Foodsection :foodList = foodStore.extra_portion></Foodsection>
+    <Foodsection :foodList = foodStore.extra_portion foodStoreVariable = 'extra_portion'></Foodsection>
     <div class="space"></div>
     <Footer></Footer>
     <Foodview></Foodview>

@@ -11,9 +11,9 @@
         <p class="head cell4">sub total</p>
       </div>
       <hr class="devider" />
-      <div class="order-item" v-for="(item, index) in mergedOrder" :key="index">
+      <div class="order-item" v-for="(item, index) in orderStore.order" :key="index">
         <div class="item-details cell1">
-          <img :src="item.image" :alt="item.name" class="item-image" />
+          <img src="https://curryhut.blr1.cdn.digitaloceanspaces.com/sample-images/koththu.webp" alt="item.name" class="item-image" />
           <div class="item-details-data">
             <p class="item-title">{{ item.name }}</p>
             <p class="item-description">{{ item.size }}</p>
@@ -41,9 +41,10 @@
         </p>
         <span class="material-icons" @click="deleteItem(index)">delete</span>
       </div>
+      <!-- special category promotion -->
       <div
         class="unavailable-category"
-        v-if="!checkCategory.find((c) => c === 'decert')"
+        v-if="decert"
         @click="router.push({ name: 'decert' })"
       >
         <p class="unavailable-category-title">DESERT</p>
@@ -53,7 +54,7 @@
       </div>
       <div
         class="unavailable-category"
-        v-if="!checkCategory.find((c) => c === 'drinks')"
+        v-if="drinks"
         @click="router.push({ name: 'drinks' })"
       >
         <p class="unavailable-category-title">DRINKS</p>
@@ -63,7 +64,7 @@
       </div>
       <div
         class="unavailable-category"
-        v-if="!checkCategory.find((c) => c === 'extra')"
+        v-if="extra"
         @click="router.push({ name: 'extra' })"
       >
         <p class="unavailable-category-title">EXTRA POTIONS</p>
@@ -94,49 +95,42 @@
 import Footer from "@/components/common/footer.vue";
 import Menubar from "@/components/common/menubar.vue";
 import router from "@/router";
-import { useFoodStore } from "@/stores/food";
+// import { useFoodStore } from "@/stores/food";
 import { useOrderStore } from "@/stores/order";
 import { computed, onBeforeMount, onUpdated, ref, watch } from "vue";
 
-const foodStore = useFoodStore();
+// pinia stores
 const orderStore = useOrderStore();
 
+// other reactive variables
 const checkoutButton = ref(true);
+const decert = ref(true)
+const drinks = ref(true)
+const extra = ref(true)
 
-// create tempary variable and store merge order data with product data
-const mergedOrder = computed(() => {
-  return orderStore.order.map((orderItem) => {
-    const productItem = foodStore.foodInfo.find(
-      (p) => p.id === orderItem.foodid
-    );
-    return {
-      categoryName: productItem.categoryName,
-      image: productItem.image,
-      name: productItem.name,
-      price: orderItem.price,
-      quantity: orderItem.quantity,
-      size: orderItem.size,
-    };
-  });
-});
+// update visibility of special category section in order page - according to the order
+watch(orderStore.order, (newVal) => {
+  newVal.find((item) => item.category_id === '670cbd0e6e6b240be2d189e5') ? drinks.value = false : drinks.value = true
+  newVal.find((item) => item.category_id === '670cbd156e6b240be2d189e6') ? decert.value = false : decert.value = true
+  newVal.find((item) => item.category_id === '67b1baa519f60cfa444a0afc') ? extra.value = false : extra.value = true
+})
 
-// check unique category in order store and set value to unavailable category using computed
-const checkCategory = computed(() => {
-  const category = orderStore.order.map((orderItem) => {
-    const productItem = foodStore.foodInfo.find(
-      (p) => p.id === orderItem.foodid
-    );
-    return productItem.categoryName;
-  });
-  return [...new Set(category)];
-});
+
+// enable or disable special category section in order page
+onBeforeMount(() => {
+  orderStore.order.find((item) => item.category_id === '670cbd0e6e6b240be2d189e5') ? drinks.value = false : drinks.value = true
+  orderStore.order.find((item) => item.category_id === '670cbd156e6b240be2d189e6') ? decert.value = false : decert.value = true
+  orderStore.order.find((item) => item.category_id === '67b1baa519f60cfa444a0afc') ? extra.value = false : extra.value = true
+})
 
 // change quantity of order items in order store
 const changeQuantity = (index, arg) => {
   if (arg === "up") {
     orderStore.order[index].quantity += 1;
-  } else {
-    orderStore.order[index].quantity -= 1;
+  } else if (arg === "down") {
+    if(orderStore.order[index].quantity > 1) {
+      orderStore.order[index].quantity -= 1;
+    }
   }
 };
 
@@ -149,12 +143,12 @@ const totalBill = computed(() =>
 );
 
 // update total bill when order store updated
-onUpdated(() => {
-  totalBill.value = orderStore.order.reduce(
-    (sum, orderItem) => sum + orderItem.price * orderItem.quantity,
-    0
-  );
-});
+// onUpdated(() => {
+//   totalBill.value = orderStore.order.reduce(
+//     (sum, orderItem) => sum + orderItem.price * orderItem.quantity,
+//     0
+//   );
+// });
 
 // delete item in order store
 const deleteItem = (index) => {

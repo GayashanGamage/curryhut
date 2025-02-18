@@ -43,9 +43,10 @@ import { useOrderStore } from "@/stores/order";
 import { useUiStore } from "@/stores/ui";
 
 // define props --------------------------------------------
-defineProps({
+const props = defineProps({
   // TODO: add defalt value as a empty array - []
-  foodList : Array
+  foodList : Array,
+  foodStoreVariable : String // this is indicate where original dataset locate in foodStore - drinks, decerts, extra, deletable
 })
 
 
@@ -57,7 +58,7 @@ const foodstore = useFoodStore();
 // functions -----------------------------------------------
 // select the food item
 const selectFood = (item, index) => {
-  foodstore.selectedFood = foodstore.foodInfo.find((food) => food.id === item )
+  foodstore.selectedFood = foodstore[props.foodStoreVariable].find((food) => food.id === item )
   orderStore.temparyOrderItem = {
     'id' : foodstore.selectedFood.id,
     'category_id' : foodstore.selectedFood.category_id,

@@ -2,7 +2,7 @@
   <main>
     <Menubar></Menubar>
     <div class="space"></div>
-    <Foodsection :foodList = foodStore.decert></Foodsection>
+    <Foodsection :foodList = foodStore.decert foodStoreVariable = 'decert'></Foodsection>
     <div class="space"></div>
     <Footer></Footer>
     <Foodview></Foodview>
