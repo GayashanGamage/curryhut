@@ -37,7 +37,7 @@
             <h4 class="section-title">Enought</h4>
             <hr class="sub-section-devider" />
             <p class="portion">
-              for {{ foodStore.price }} person
+              for {{ foodStore.portion }} person
             </p>
           </div>
         </div>
@@ -45,7 +45,7 @@
           <h4 class="section-title">Price</h4>
           <hr class="sub-section-devider" />
           <p class="price">
-            Rs.{{ foodStore.portion }}
+            Rs.{{ foodStore.price }}
           </p>
         </div>
         <div class="sub-section">
@@ -61,7 +61,10 @@
             </button>
           </div>
         </div>
-        <button class="cart-button" @click="addtocart">Add to cart</button>
+        <div class="sub-section">
+          <p class="red-notice" v-if="!foodStore.selectedFood.availability">out of stock</p>
+          <button class="cart-button" @click="addtocart" :disabled="!foodStore.selectedFood.availability">Add to cart</button>
+        </div>
       </div>
     </div>
   </div>
@@ -333,10 +336,23 @@ const changeFoodSize = (item, index) => {
 .cart-button:active {
   background: #ff5e5e;
 }
+.cart-button:disabled{
+  background: #d5d5d5;
+  color: #fff;
+  font-weight: 400;
+  cursor: not-allowed;
+}
 .button-container{
   margin-block: 8px;
   display: flex;
   flex-direction: row;
   gap: 6px;
+}
+.red-notice{
+  background-color: var(--notice-red);
+  color: #FFF;
+  padding: 2px 20px;
+  font-size: 12px;
+  border-radius: 10px;
 }
 </style>

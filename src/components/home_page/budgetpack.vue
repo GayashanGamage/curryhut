@@ -11,7 +11,8 @@
       <div class="content-container">
         <div class="content-item" v-for="item in foodStore.ricePack" :key="item.id">
           <p class="item-description">{{ item.name }}</p>
-          <button class="item-action" @click="openPopup(item.id)">
+          <p class="red-notice" v-if="!item.availability">out of stock</p>
+          <button class="item-action" @click="openPopup(item.id)" :disabled="!item.availability">
             Select curries
           </button>
         </div>
@@ -137,5 +138,17 @@ const openPopup = (id) => {
 }
 .item-action:hover {
   background: #fc6d6d;
+}
+.item-action:disabled {
+  background: #d5d5d5;
+  color: #fff;
+  font-weight: 400;
+}
+.red-notice{
+  background-color: var(--notice-red);
+  color: #FFF;
+  padding: 2px 20px;
+  font-size: 12px;
+  border-radius: 10px;
 }
 </style>

@@ -16,7 +16,7 @@
         <img src="https://curryhut.blr1.cdn.digitaloceanspaces.com/sample-images/koththu.webp" alt="image-name" class="food-image" />
         <h4 class="food-title">{{ item.name }}</h4>
         <p class="food-price">
-          Rs. {{ item.price[0].portion }}
+          Rs. {{ item.price[0].price }}
         </p>
         <button class="action-button" @click="selectFood(item.id, index)">
           view
@@ -64,7 +64,8 @@ const selectFood = (item, index) => {
     'name' : foodstore.selectedFood.name,
     'price' : foodstore.selectedFood.price[foodstore.selectedPotion].price,
     'quantity' : 1,
-    'size' : foodstore.selectedFood.price[foodstore.selectedPotion].name  
+    'size' : foodstore.selectedFood.price[foodstore.selectedPotion].name,
+    'availability' : foodstore.selectedFood.price[foodstore.selectedPotion].availability
   }
   foodstore.portion = foodstore.selectedFood.price[foodstore.selectedPotion].portion
   foodstore.price = foodstore.selectedFood.price[foodstore.selectedPotion].price
