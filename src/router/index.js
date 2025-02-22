@@ -11,6 +11,7 @@ import OrderSummery from "@/views/orderSummery.vue";
 import Checkout from "@/views/checkout.vue";
 import OrderType from "@/views/orderType.vue";
 import { useUiStore } from "@/stores/ui";
+import { useOrderStore } from "@/stores/order";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -75,5 +76,12 @@ const router = createRouter({
     return { top: 0 };
   },
 });
+
+router.beforeEach((to, from) => {
+  // load orders from cookies when page reload 
+  if(useOrderStore().orderCount == 0){
+    useOrderStore().getOrderFromCookies() 
+  }
+}) 
 
 export default router;

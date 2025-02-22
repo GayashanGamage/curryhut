@@ -64,6 +64,34 @@ export const useOrderStore = defineStore("order", () => {
       type: "success",
     });
   };
+  
+  watch(
+    () => order.value, 
+    (newValue) => {
+      console.log(newValue);
+      if (newValue.length > 0) {
+        document.cookie = `order=${JSON.stringify(newValue)}; expires=Thu, 18 Dec 2033 12:00:00 UTC; path=/`;
+      } else {
+        console.log('remove cookie');
+        document.cookie = "order=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+      }
+    },
+    { deep: true } 
+  );
+
+  // load order cookie to order variable - when change pages
+  function getOrderFromCookies() {
+    const cookies = document.cookie.split('; '); 
+    const orderCookie = cookies.find(cookie => cookie.startsWith('order=')); 
+    
+    if (orderCookie) {
+      const orderString = orderCookie.split('=')[1]; 
+      order.value =  JSON.parse(orderString); 
+    }else{
+      order.value = [];
+    }
+  }
+
 
   return {
     curryCount,
@@ -73,5 +101,6 @@ export const useOrderStore = defineStore("order", () => {
     temparyOrderItem,
     summery,
     addToOrder,
+    getOrderFromCookies,
   };
 });

@@ -101,7 +101,7 @@ import router from "@/router";
 import { useFoodStore } from "@/stores/food";
 // import { useFoodStore } from "@/stores/food";
 import { useOrderStore } from "@/stores/order";
-import { computed, onBeforeMount, onUpdated, ref, watch } from "vue";
+import { computed, onBeforeMount, onMounted, onUpdated, ref, watch } from "vue";
 
 // pinia stores
 const orderStore = useOrderStore();
@@ -186,6 +186,8 @@ onBeforeMount(() => {
     checkoutButton.value = false;
   }
 });
+
+
 </script>
 
 <style scoped>
