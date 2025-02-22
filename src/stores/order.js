@@ -65,14 +65,18 @@ export const useOrderStore = defineStore("order", () => {
     });
   };
   
+  function cookieExireationTime(){
+    let a = new Date().getTime() + 900000
+    return new Date(a).toUTCString();
+  }
+
   watch(
     () => order.value, 
     (newValue) => {
       console.log(newValue);
       if (newValue.length > 0) {
-        document.cookie = `order=${JSON.stringify(newValue)}; expires=Thu, 18 Dec 2033 12:00:00 UTC; path=/`;
+        document.cookie = `order=${JSON.stringify(newValue)}; expires=${cookieExireationTime()}; path=/`;
       } else {
-        console.log('remove cookie');
         document.cookie = "order=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
       }
     },
@@ -87,6 +91,7 @@ export const useOrderStore = defineStore("order", () => {
     if (orderCookie) {
       const orderString = orderCookie.split('=')[1]; 
       order.value =  JSON.parse(orderString); 
+      orderCount.value = order.value.length;
     }else{
       order.value = [];
     }
