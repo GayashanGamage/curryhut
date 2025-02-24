@@ -20,6 +20,7 @@ export const useUiStore = defineStore("ui", () => {
 
   // authonticate related
   const allowMobile = ref(false)
+  const allowVerification = ref(false)
 
   return {
     foodPopup,
@@ -32,5 +33,6 @@ export const useUiStore = defineStore("ui", () => {
     budgetPackSection,
     bugetPack,
     allowMobile,
+    allowVerification,
   };
 });

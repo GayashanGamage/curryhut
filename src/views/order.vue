@@ -83,7 +83,7 @@
       <hr class="devider" />
       <button
         class="order-action-button"
-        @click="router.push({ name: 'mobile' })"
+        @click="checkoutCart"
         :disabled="checkoutButton"
       >
         CHECKOUT
@@ -98,14 +98,23 @@
 import Footer from "@/components/common/footer.vue";
 import Menubar from "@/components/common/menubar.vue";
 import router from "@/router";
+import { useAuthonticationStore } from "@/stores/auth";
 import { useFoodStore } from "@/stores/food";
 // import { useFoodStore } from "@/stores/food";
 import { useOrderStore } from "@/stores/order";
+import { useUiStore } from "@/stores/ui";
+import axios from "axios";
 import { computed, onBeforeMount, onMounted, onUpdated, ref, watch } from "vue";
+import { useToast } from "vue-toast-notification";
+const authStore = useAuthonticationStore()
+const uiStore = useUiStore()
 
 // pinia stores
 const orderStore = useOrderStore();
 const foodstore = useFoodStore();
+
+// toast notification
+const notification = useToast()
 
 // other reactive variables
 const checkoutButton = ref(true);
@@ -169,6 +178,32 @@ const deleteItem = (index) => {
   orderStore.order.splice(index, 1);
 };
 
+// action button 
+const checkoutCart = () => {
+  if(authStore.user_key != null){
+    axios.get(`${import.meta.env.VITE_url}/customer/auth/customerKey/${authStore.user_key}`
+    ).then((response) => {
+      if(response.status.data.status == 1001){
+        uiStore.allowMobile = true // this allow dirrect to checkout page while passing other steps
+        router.push({ name: "checkout" });
+      }else if(response.status.data.status == 1001){
+        uiStore.allowVerification = true // this allow dirrect to checkout page while passing other steps
+        router.push({ name: "verification" });
+      }
+    }).catch((err) => {
+      if(err.status == 404){
+        notification.error("something go wrong - try again later")        
+      }else if(err.status == 422){
+        notification.error("Enter valied user key")
+      }
+    })
+  }
+  else{
+    uiStore.allowMobile = true
+    router.push({ name: "mobile" });
+  }
+}
+
 // check if order store is empty, then disable checkout button
 watch(orderStore.order, (newValue) => {
   if (newValue.length === 0) {
@@ -187,6 +222,10 @@ onBeforeMount(() => {
   }
 });
 
+// load user_key from cookies if available
+onMounted(() => {
+  authStore.loadUserKey()
+})
 
 </script>
 

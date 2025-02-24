@@ -85,9 +85,9 @@ export const useOrderStore = defineStore("order", () => {
 
   // load order cookie to order variable - when change pages
   function getOrderFromCookies() {
-    const cookies = document.cookie.split('; '); 
+    const cookies = document.cookie.split('; ');
     const orderCookie = cookies.find(cookie => cookie.startsWith('order=')); 
-    
+
     if (orderCookie) {
       const orderString = orderCookie.split('=')[1]; 
       order.value =  JSON.parse(orderString); 

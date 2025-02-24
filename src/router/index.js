@@ -85,7 +85,7 @@ const router = createRouter({
       name: "verification",
       component: VerificationCode,
       beforeEnter : ((to, from, next) => {
-        if(to.name == 'verification' && from.name != 'mobile'){
+        if((to.name == 'verification' && from.name != 'mobile') || useUiStore().allowVerification != true){
           next({'name' : 'order'})
         }else{
           next()
