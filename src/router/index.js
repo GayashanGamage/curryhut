@@ -60,16 +60,37 @@ const router = createRouter({
       path: "/checkout",
       name: "checkout",
       component: Checkout,
+      beforeEnter : ((to, from, next) => {
+        if(to.name == 'checkout' && (from.name != 'mobile' || from.name != 'mobile' || from.name != 'order')){
+          next({'name' : 'home'})
+        }else{
+          next()
+        }
+      })
     },
     {
       path: "/mobile",
       name: "mobile",
       component: mobile,
+      beforeEnter : ((to, from, next) => {
+        if(to.name == 'mobile' && useUiStore().allowMobile != true){
+          next({'name' : 'order'})
+        }else{
+          next()
+        }
+      })
     },
     {
       path: "/verification",
       name: "verification",
       component: VerificationCode,
+      beforeEnter : ((to, from, next) => {
+        if(to.name == 'verification' && from.name != 'mobile'){
+          next({'name' : 'order'})
+        }else{
+          next()
+        }
+      })
     },
   ],
   scrollBehavior(to, from, savedPosition) {
@@ -77,7 +98,7 @@ const router = createRouter({
   },
 });
 
-router.beforeEach((to, from) => {
+router.beforeEach((to, from ) => {
   // load orders from cookies when page reload 
   if(useOrderStore().orderCount == 0){
     useOrderStore().getOrderFromCookies() 

@@ -18,6 +18,9 @@ export const useUiStore = defineStore("ui", () => {
   // componennt visibility
   const bugetPack = ref(false)
 
+  // authonticate related
+  const allowMobile = ref(false)
+
   return {
     foodPopup,
     riceandcurryPopup,
@@ -27,6 +30,7 @@ export const useUiStore = defineStore("ui", () => {
     categorySection,
     // mainProductSection,
     budgetPackSection,
-    bugetPack
+    bugetPack,
+    allowMobile,
   };
 });
